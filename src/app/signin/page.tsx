@@ -31,18 +31,31 @@ function SignInForm() {
   // Pre-populate email from URL param (set when returning to resend)
   const emailParam = searchParams.get("email") ?? "";
 
+  const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState(emailParam);
   const [emailError, setEmailError] = useState<string>("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState("");
   const [passwordError, setPasswordError] = useState<string>("");
+  const [registerError, setRegisterError] = useState<string>("");
   const [loadingProvider, setLoadingProvider] = useState<
-    "google" | "apple" | "email" | "credentials" | null
+    "google" | "apple" | "email" | "credentials" | "register" | null
   >(null);
 
   // Sync email param changes (e.g. when navigating back with a different address)
   useEffect(() => {
     if (emailParam) setEmail(emailParam);
   }, [emailParam]);
+
+  function switchMode(next: "signin" | "signup") {
+    setMode(next);
+    setPasswordError("");
+    setRegisterError("");
+    setEmailError("");
+    setPassword("");
+    setConfirmPassword("");
+  }
 
   async function handleSSOSignIn(provider: "google" | "apple") {
     if (loadingProvider) return;
@@ -79,6 +92,51 @@ function SignInForm() {
       window.location.href = callbackUrl;
     } catch {
       setPasswordError("Sign-in failed. Please try again.");
+    } finally {
+      setLoadingProvider(null);
+    }
+  }
+
+  async function handleRegister(e: React.FormEvent) {
+    e.preventDefault();
+    if (loadingProvider) return;
+    setRegisterError("");
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setRegisterError("Please enter a valid email address.");
+      return;
+    }
+    if (password.length < 8) {
+      setRegisterError("Password must be at least 8 characters.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setRegisterError("Passwords do not match.");
+      return;
+    }
+
+    setLoadingProvider("register");
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, name: name.trim() || undefined }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setRegisterError(data.error ?? "Registration failed. Please try again.");
+        return;
+      }
+      // Auto sign-in after successful registration
+      const result = await signIn("credentials", { email, password, redirect: false });
+      if (result?.error) {
+        setRegisterError("Account created but sign-in failed. Try signing in manually.");
+        return;
+      }
+      const callbackUrl = searchParams.get("callbackUrl") ?? "/";
+      window.location.href = callbackUrl;
+    } catch {
+      setRegisterError("Something went wrong. Please try again.");
     } finally {
       setLoadingProvider(null);
     }
@@ -149,146 +207,243 @@ function SignInForm() {
           </div>
         )}
 
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm space-y-6">
-          {/* SSO Buttons */}
-          <div className="space-y-3">
-            {/* Google SSO */}
+        <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+          {/* Mode toggle tabs */}
+          <div className="flex border-b border-gray-200">
             <button
               type="button"
-              onClick={() => handleSSOSignIn("google")}
-              disabled={loadingProvider !== null}
-              aria-label="Continue with Google"
-              className="relative flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+              onClick={() => switchMode("signin")}
+              className={`flex-1 py-3 text-sm font-medium transition-colors ${
+                mode === "signin"
+                  ? "border-b-2 border-blue-600 text-blue-600 bg-white"
+                  : "text-gray-500 hover:text-gray-700 bg-gray-50"
+              }`}
             >
-              {loadingProvider === "google" ? (
-                <LoadingSpinner />
-              ) : (
-                <GoogleIcon />
-              )}
-              Continue with Google
+              Sign in
             </button>
-
-            {/* Apple SSO */}
             <button
               type="button"
-              onClick={() => handleSSOSignIn("apple")}
-              disabled={loadingProvider !== null}
-              aria-label="Continue with Apple"
-              className="relative flex w-full items-center justify-center gap-3 rounded-lg border border-gray-900 bg-gray-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+              onClick={() => switchMode("signup")}
+              className={`flex-1 py-3 text-sm font-medium transition-colors ${
+                mode === "signup"
+                  ? "border-b-2 border-blue-600 text-blue-600 bg-white"
+                  : "text-gray-500 hover:text-gray-700 bg-gray-50"
+              }`}
             >
-              {loadingProvider === "apple" ? (
-                <LoadingSpinner className="text-white" />
-              ) : (
-                <AppleIcon />
-              )}
-              Continue with Apple
+              Create account
             </button>
           </div>
 
-          {/* Divider */}
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200" />
+          <div className="p-6 space-y-6">
+            {/* SSO Buttons */}
+            <div className="space-y-3">
+              <button
+                type="button"
+                onClick={() => handleSSOSignIn("google")}
+                disabled={loadingProvider !== null}
+                aria-label={mode === "signup" ? "Sign up with Google" : "Continue with Google"}
+                className="relative flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {loadingProvider === "google" ? <LoadingSpinner /> : <GoogleIcon />}
+                {mode === "signup" ? "Sign up with Google" : "Continue with Google"}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleSSOSignIn("apple")}
+                disabled={loadingProvider !== null}
+                aria-label={mode === "signup" ? "Sign up with Apple" : "Continue with Apple"}
+                className="relative flex w-full items-center justify-center gap-3 rounded-lg border border-gray-900 bg-gray-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {loadingProvider === "apple" ? <LoadingSpinner className="text-white" /> : <AppleIcon />}
+                {mode === "signup" ? "Sign up with Apple" : "Continue with Apple"}
+              </button>
             </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="bg-white px-2 text-gray-500">or continue with email</span>
+
+            {/* Divider */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="bg-white px-2 text-gray-500">or continue with email</span>
+              </div>
             </div>
+
+            {mode === "signin" ? (
+              /* Password sign-in form */
+              <form onSubmit={handleCredentials} className="space-y-3">
+                <div>
+                  <label htmlFor="cred-email" className="sr-only">Email address</label>
+                  <input
+                    id="cred-email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    value={email}
+                    onChange={(e) => { setEmail(e.target.value); if (passwordError) setPasswordError(""); }}
+                    placeholder="you@example.com"
+                    disabled={loadingProvider !== null}
+                    className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="password" className="sr-only">Password</label>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={(e) => { setPassword(e.target.value); if (passwordError) setPasswordError(""); }}
+                    placeholder="Password"
+                    disabled={loadingProvider !== null}
+                    aria-invalid={passwordError ? "true" : undefined}
+                    aria-describedby={passwordError ? "pw-error" : undefined}
+                    className={`block w-full rounded-lg border px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-1 disabled:bg-gray-50 ${
+                      passwordError
+                        ? "border-red-400 focus:border-red-500 focus:ring-red-500"
+                        : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    }`}
+                  />
+                  {passwordError && (
+                    <p id="pw-error" role="alert" className="mt-1 text-xs text-red-600">{passwordError}</p>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  disabled={loadingProvider !== null}
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {loadingProvider === "credentials" && <LoadingSpinner className="text-white" />}
+                  {loadingProvider === "credentials" ? "Signing in…" : "Sign in with password"}
+                </button>
+              </form>
+            ) : (
+              /* Registration form */
+              <form onSubmit={handleRegister} className="space-y-3">
+                <div>
+                  <label htmlFor="reg-name" className="sr-only">Name (optional)</label>
+                  <input
+                    id="reg-name"
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Your name (optional)"
+                    disabled={loadingProvider !== null}
+                    className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="reg-email" className="sr-only">Email address</label>
+                  <input
+                    id="reg-email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    value={email}
+                    onChange={(e) => { setEmail(e.target.value); if (registerError) setRegisterError(""); }}
+                    placeholder="you@example.com"
+                    disabled={loadingProvider !== null}
+                    className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="reg-password" className="sr-only">Password</label>
+                  <input
+                    id="reg-password"
+                    name="password"
+                    type="password"
+                    autoComplete="new-password"
+                    value={password}
+                    onChange={(e) => { setPassword(e.target.value); if (registerError) setRegisterError(""); }}
+                    placeholder="Password (min 8 characters)"
+                    disabled={loadingProvider !== null}
+                    className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="reg-confirm" className="sr-only">Confirm password</label>
+                  <input
+                    id="reg-confirm"
+                    name="confirmPassword"
+                    type="password"
+                    autoComplete="new-password"
+                    value={confirmPassword}
+                    onChange={(e) => { setConfirmPassword(e.target.value); if (registerError) setRegisterError(""); }}
+                    placeholder="Confirm password"
+                    disabled={loadingProvider !== null}
+                    aria-invalid={registerError ? "true" : undefined}
+                    aria-describedby={registerError ? "reg-error" : undefined}
+                    className={`block w-full rounded-lg border px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-1 disabled:bg-gray-50 ${
+                      registerError
+                        ? "border-red-400 focus:border-red-500 focus:ring-red-500"
+                        : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    }`}
+                  />
+                  {registerError && (
+                    <p id="reg-error" role="alert" className="mt-1 text-xs text-red-600">{registerError}</p>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  disabled={loadingProvider !== null}
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {loadingProvider === "register" && <LoadingSpinner className="text-white" />}
+                  {loadingProvider === "register" ? "Creating account…" : "Create account"}
+                </button>
+              </form>
+            )}
+
+            {/* Magic link divider */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="bg-white px-2 text-gray-500">or use a magic link</span>
+              </div>
+            </div>
+
+            {/* Magic Link Form */}
+            <form onSubmit={handleMagicLink} className="space-y-3">
+              <div>
+                <label htmlFor="email" className="sr-only">Email address</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); if (emailError) setEmailError(""); }}
+                  placeholder="you@example.com"
+                  disabled={loadingProvider !== null}
+                  aria-invalid={emailError ? "true" : undefined}
+                  aria-describedby={emailError ? "email-error" : undefined}
+                  className={`block w-full rounded-lg border px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-1 disabled:bg-gray-50 disabled:text-gray-500 ${
+                    emailError
+                      ? "border-red-400 focus:border-red-500 focus:ring-red-500"
+                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  }`}
+                />
+                {emailError && (
+                  <p id="email-error" role="alert" className="mt-1 text-xs text-red-600">{emailError}</p>
+                )}
+              </div>
+              <button
+                type="submit"
+                disabled={loadingProvider !== null}
+                className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {loadingProvider === "email" && <LoadingSpinner />}
+                {loadingProvider === "email" ? "Sending…" : "Send magic link"}
+              </button>
+            </form>
           </div>
-
-          {/* Password login form */}
-          <form onSubmit={handleCredentials} className="space-y-3">
-            <div>
-              <label htmlFor="cred-email" className="sr-only">Email address</label>
-              <input
-                id="cred-email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                value={email}
-                onChange={(e) => { setEmail(e.target.value); if (passwordError) setPasswordError(""); }}
-                placeholder="you@example.com"
-                disabled={loadingProvider !== null}
-                className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">Password</label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => { setPassword(e.target.value); if (passwordError) setPasswordError(""); }}
-                placeholder="Password"
-                disabled={loadingProvider !== null}
-                aria-invalid={passwordError ? "true" : undefined}
-                aria-describedby={passwordError ? "pw-error" : undefined}
-                className={`block w-full rounded-lg border px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-1 disabled:bg-gray-50 ${
-                  passwordError
-                    ? "border-red-400 focus:border-red-500 focus:ring-red-500"
-                    : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                }`}
-              />
-              {passwordError && (
-                <p id="pw-error" role="alert" className="mt-1 text-xs text-red-600">{passwordError}</p>
-              )}
-            </div>
-            <button
-              type="submit"
-              disabled={loadingProvider !== null}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {loadingProvider === "credentials" && <LoadingSpinner className="text-white" />}
-              {loadingProvider === "credentials" ? "Signing in…" : "Sign in with password"}
-            </button>
-          </form>
-
-          {/* Magic link divider */}
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="bg-white px-2 text-gray-500">or use a magic link</span>
-            </div>
-          </div>
-
-          {/* Magic Link Form */}
-          <form onSubmit={handleMagicLink} className="space-y-3">
-            <div>
-              <label htmlFor="email" className="sr-only">Email address</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => { setEmail(e.target.value); if (emailError) setEmailError(""); }}
-                placeholder="you@example.com"
-                disabled={loadingProvider !== null}
-                aria-invalid={emailError ? "true" : undefined}
-                aria-describedby={emailError ? "email-error" : undefined}
-                className={`block w-full rounded-lg border px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-1 disabled:bg-gray-50 disabled:text-gray-500 ${
-                  emailError
-                    ? "border-red-400 focus:border-red-500 focus:ring-red-500"
-                    : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                }`}
-              />
-              {emailError && (
-                <p id="email-error" role="alert" className="mt-1 text-xs text-red-600">{emailError}</p>
-              )}
-            </div>
-            <button
-              type="submit"
-              disabled={loadingProvider !== null}
-              className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {loadingProvider === "email" && <LoadingSpinner />}
-              {loadingProvider === "email" ? "Sending…" : "Send magic link"}
-            </button>
-          </form>
         </div>
 
         <p className="text-center text-xs text-gray-500">

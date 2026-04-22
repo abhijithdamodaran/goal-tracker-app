@@ -63,6 +63,9 @@ model User {
   /// Bcrypt-hashed password for credentials login. Null for SSO-only users.
   password String?
 
+  /// IANA timezone chosen during onboarding (e.g. "America/New_York"). Default UTC.
+  timezone String @default("UTC")
+
   // NextAuth relations
   accounts Account[]
   sessions Session[]

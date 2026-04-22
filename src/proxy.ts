@@ -34,6 +34,7 @@ const PUBLIC_PATHS: string[] = [
   "/auth-error",
   "/terms",
   "/privacy",
+  "/invite",
 ];
 
 /** Prefix for NextAuth's internal API routes — always public. */

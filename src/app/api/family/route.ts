@@ -83,6 +83,73 @@ export async function POST(request: NextRequest) {
   }
 }
 
+export async function PATCH(request: NextRequest) {
+  try {
+    const user = await getCurrentUser();
+    if (!user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const membership = await prisma.familyMember.findFirst({
+      where: { userId: user.id },
+      select: { workspaceId: true, role: true },
+    });
+    if (!membership) return NextResponse.json({ error: "Not in a family workspace" }, { status: 404 });
+    if (membership.role !== "owner" && membership.role !== "admin") {
+      return NextResponse.json({ error: "Only owners and admins can rename the workspace" }, { status: 403 });
+    }
+
+    const body = await request.json();
+    const result = createFamilyWorkspaceSchema.safeParse(body);
+    if (!result.success) {
+      return NextResponse.json({ error: "Validation failed", details: result.error.flatten().fieldErrors }, { status: 400 });
+    }
+
+    const workspace = await prisma.familyWorkspace.update({
+      where: { id: membership.workspaceId },
+      data: { name: result.data.familyName },
+    });
+    return NextResponse.json({ workspace });
+  } catch (error) {
+    console.error("Failed to rename family workspace:", error);
+    return NextResponse.json({ error: "An unexpected error occurred." }, { status: 500 });
+  }
+}
+
+export async function DELETE() {
+  try {
+    const user = await getCurrentUser();
+    if (!user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const membership = await prisma.familyMember.findFirst({
+      where: { userId: user.id },
+      include: { workspace: { include: { members: true } } },
+    });
+    if (!membership) return NextResponse.json({ error: "Not in a family workspace" }, { status: 404 });
+
+    const isOwner = membership.role === "owner";
+    const otherMembers = membership.workspace.members.filter((m) => m.userId !== user.id);
+
+    if (isOwner && otherMembers.length > 0) {
+      return NextResponse.json(
+        { error: "Transfer ownership before leaving, or remove all other members first." },
+        { status: 409 }
+      );
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.familyMember.delete({ where: { id: membership.id } });
+      // If owner was last member, delete the workspace too
+      if (isOwner && otherMembers.length === 0) {
+        await tx.familyWorkspace.delete({ where: { id: membership.workspaceId } });
+      }
+    });
+
+    return NextResponse.json({ message: "You have left the family workspace." });
+  } catch (error) {
+    console.error("Failed to leave family workspace:", error);
+    return NextResponse.json({ error: "An unexpected error occurred." }, { status: 500 });
+  }
+}
+
 export async function GET() {
   try {
     const user = await getCurrentUser();

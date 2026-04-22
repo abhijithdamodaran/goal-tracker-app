@@ -126,16 +126,59 @@ function WelcomeStep({ onNext }: { onNext: () => void }) {
 
 // ─── Step: Name ───────────────────────────────────────────────────────────────
 
+// Common IANA timezones grouped by region for the picker
+const TIMEZONE_OPTIONS = [
+  { label: "UTC", value: "UTC" },
+  { label: "US — Eastern (New York)", value: "America/New_York" },
+  { label: "US — Central (Chicago)", value: "America/Chicago" },
+  { label: "US — Mountain (Denver)", value: "America/Denver" },
+  { label: "US — Pacific (Los Angeles)", value: "America/Los_Angeles" },
+  { label: "US — Alaska", value: "America/Anchorage" },
+  { label: "US — Hawaii", value: "Pacific/Honolulu" },
+  { label: "Canada — Toronto", value: "America/Toronto" },
+  { label: "Canada — Vancouver", value: "America/Vancouver" },
+  { label: "Europe — London", value: "Europe/London" },
+  { label: "Europe — Paris / Berlin", value: "Europe/Paris" },
+  { label: "Europe — Amsterdam", value: "Europe/Amsterdam" },
+  { label: "Europe — Moscow", value: "Europe/Moscow" },
+  { label: "India — Kolkata", value: "Asia/Kolkata" },
+  { label: "Asia — Dubai", value: "Asia/Dubai" },
+  { label: "Asia — Singapore", value: "Asia/Singapore" },
+  { label: "Asia — Tokyo", value: "Asia/Tokyo" },
+  { label: "Asia — Shanghai", value: "Asia/Shanghai" },
+  { label: "Asia — Seoul", value: "Asia/Seoul" },
+  { label: "Australia — Sydney", value: "Australia/Sydney" },
+  { label: "Australia — Melbourne", value: "Australia/Melbourne" },
+  { label: "Australia — Perth", value: "Australia/Perth" },
+  { label: "New Zealand — Auckland", value: "Pacific/Auckland" },
+  { label: "Brazil — São Paulo", value: "America/Sao_Paulo" },
+  { label: "Argentina — Buenos Aires", value: "America/Argentina/Buenos_Aires" },
+  { label: "Mexico — Mexico City", value: "America/Mexico_City" },
+  { label: "Africa — Johannesburg", value: "Africa/Johannesburg" },
+  { label: "Africa — Cairo", value: "Africa/Cairo" },
+];
+
+function detectTimezone(): string {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+  } catch {
+    return "UTC";
+  }
+}
+
 function NameStep({
   initialName,
+  initialTimezone,
   onNext,
   onBack,
 }: {
   initialName: string;
-  onNext: (name: string) => void;
+  initialTimezone: string;
+  onNext: (name: string, timezone: string) => void;
   onBack: () => void;
 }) {
   const [name, setName] = useState(initialName);
+  const [timezone, setTimezone] = useState(initialTimezone);
   const [error, setError] = useState("");
 
   function handleSubmit(e: React.FormEvent) {
@@ -149,14 +192,14 @@ function NameStep({
       setError("Name must be at most 100 characters.");
       return;
     }
-    onNext(trimmed);
+    onNext(trimmed, timezone);
   }
 
   return (
     <div className="space-y-6">
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-bold tracking-tight text-gray-900">
-          What should we call you?
+          Tell us about yourself
         </h2>
         <p className="text-gray-600">
           This is how you&apos;ll appear to family members you invite.
@@ -174,38 +217,41 @@ function NameStep({
             autoFocus
             autoComplete="name"
             value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-              if (error) setError("");
-            }}
+            onChange={(e) => { setName(e.target.value); if (error) setError(""); }}
             placeholder="e.g. Alex"
             aria-invalid={error ? "true" : undefined}
             aria-describedby={error ? "name-error" : undefined}
             className={`block w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 ${
-              error
-                ? "border-red-400 focus:border-red-500 focus:ring-red-500"
-                : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+              error ? "border-red-400 focus:border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
             }`}
           />
           {error && (
-            <p id="name-error" role="alert" className="mt-1.5 text-sm text-red-600">
-              {error}
-            </p>
+            <p id="name-error" role="alert" className="mt-1.5 text-sm text-red-600">{error}</p>
           )}
         </div>
 
-        <div className="flex items-center justify-between pt-2">
-          <button
-            type="button"
-            onClick={onBack}
-            className="text-sm font-medium text-gray-600 hover:text-gray-900 focus:outline-none"
+        <div>
+          <label htmlFor="timezone" className="block text-sm font-medium text-gray-700 mb-1.5">
+            Your timezone
+          </label>
+          <select
+            id="timezone"
+            value={timezone}
+            onChange={(e) => setTimezone(e.target.value)}
+            className="block w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
+            {TIMEZONE_OPTIONS.map((tz) => (
+              <option key={tz.value} value={tz.value}>{tz.label}</option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-gray-500">Used to calculate daily habit resets and streak boundaries.</p>
+        </div>
+
+        <div className="flex items-center justify-between pt-2">
+          <button type="button" onClick={onBack} className="text-sm font-medium text-gray-600 hover:text-gray-900 focus:outline-none">
             ← Back
           </button>
-          <button
-            type="submit"
-            className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
+          <button type="submit" className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
             Continue
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -414,9 +460,10 @@ export default function OnboardingPage() {
   const [isPending, startTransition] = useTransition();
 
   const [step, setStep] = useState<Step>("welcome");
-  const [displayName, setDisplayName] = useState(
-    session?.user?.name ?? ""
-  );
+  const [displayName, setDisplayName] = useState(session?.user?.name ?? "");
+  const [timezone, setTimezone] = useState(() => {
+    try { return Intl.DateTimeFormat().resolvedOptions().timeZone; } catch { return "UTC"; }
+  });
   const [apiError, setApiError] = useState("");
 
   // ── Step navigation helpers ──────────────────────────────────────────────
@@ -436,7 +483,7 @@ export default function OnboardingPage() {
       const res = await fetch("/api/user/onboarding", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: displayName || undefined }),
+        body: JSON.stringify({ name: displayName || undefined, timezone }),
       });
 
       if (!res.ok) {
@@ -481,8 +528,10 @@ export default function OnboardingPage() {
       {step === "name" && (
         <NameStep
           initialName={displayName}
-          onNext={(name) => {
+          initialTimezone={timezone}
+          onNext={(name, tz) => {
             setDisplayName(name);
+            setTimezone(tz);
             goToStep("workspace");
           }}
           onBack={() => goToStep("welcome")}

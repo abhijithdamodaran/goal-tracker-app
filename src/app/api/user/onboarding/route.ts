@@ -4,14 +4,15 @@ import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
 const completeOnboardingSchema = z.object({
-  /**
-   * Display name chosen during onboarding.
-   * Optional — the user may already have a name from their OAuth provider.
-   */
   name: z
     .string()
     .min(1, "Name cannot be empty")
     .max(100, "Name must be at most 100 characters")
+    .optional(),
+  timezone: z
+    .string()
+    .min(1)
+    .max(100)
     .optional(),
 });
 
@@ -51,7 +52,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const { name } = parsed.data;
+  const { name, timezone } = parsed.data;
 
   try {
     const updated = await prisma.user.update({
@@ -59,6 +60,7 @@ export async function POST(request: Request) {
       data: {
         onboardingCompleted: true,
         ...(name !== undefined && { name: name.trim() }),
+        ...(timezone !== undefined && { timezone }),
       },
       select: {
         id: true,
