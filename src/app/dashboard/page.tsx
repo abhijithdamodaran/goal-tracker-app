@@ -12,8 +12,8 @@ export default async function DashboardPage() {
   const userId = session.user.id;
   const displayName = session.user.name ?? session.user.email ?? "there";
 
-  // Load family membership and habit count in parallel
-  const [membership, habitCount] = await Promise.all([
+  // Load family membership, habit count, and goals in parallel
+  const [membership, habitCount, familyMemberships] = await Promise.all([
     prisma.familyMember.findFirst({
       where: { userId },
       include: {
@@ -23,7 +23,22 @@ export default async function DashboardPage() {
       },
     }),
     prisma.habit.count({ where: { userId, isActive: true } }),
+    prisma.familyMember.findMany({ where: { userId }, select: { workspaceId: true } }),
   ]);
+
+  const familyWorkspaceIds = familyMemberships.map((m) => m.workspaceId);
+  const goals = await prisma.goal.findMany({
+    where: {
+      archivedAt: null,
+      OR: [
+        { ownerId: userId, workspaceType: "personal" },
+        { workspaceType: "family", workspaceId: { in: familyWorkspaceIds } },
+      ],
+    },
+    include: { owner: { select: { id: true, name: true } } },
+    orderBy: { createdAt: "desc" },
+    take: 10,
+  });
 
   const workspace = membership?.workspace ?? null;
   const hasFamily = workspace !== null;
@@ -55,11 +70,10 @@ export default async function DashboardPage() {
     },
     {
       id: "goal",
-      done: false,
-      label: "Create your first goal",
+      done: goals.length > 0,
+      label: goals.length > 0 ? `${goals.length} goal${goals.length !== 1 ? "s" : ""} created` : "Create your first goal",
       href: "/goals/new",
       cta: "Create",
-      comingSoon: true,
     },
   ].filter((c) => !c.hidden);
 
@@ -80,20 +94,10 @@ export default async function DashboardPage() {
           </div>
 
           <nav className="hidden sm:flex items-center gap-1">
-            {[
-              { label: "Today", href: "/today", soon: true },
-              { label: "Habits", href: "/habits", soon: true },
-              { label: "Goals", href: "/goals", soon: true },
-              { label: "Sprints", href: "/sprints", soon: true },
-            ].map((item) => (
-              <span
-                key={item.label}
-                title="Coming soon"
-                className="cursor-default rounded-lg px-3 py-1.5 text-sm font-medium text-gray-400"
-              >
-                {item.label}
-              </span>
-            ))}
+            <span title="Coming soon" className="cursor-default rounded-lg px-3 py-1.5 text-sm font-medium text-gray-400">Today</span>
+            <span title="Coming soon" className="cursor-default rounded-lg px-3 py-1.5 text-sm font-medium text-gray-400">Habits</span>
+            <Link href="/goals/new" className="rounded-lg px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100">Goals</Link>
+            <span title="Coming soon" className="cursor-default rounded-lg px-3 py-1.5 text-sm font-medium text-gray-400">Sprints</span>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -154,16 +158,12 @@ export default async function DashboardPage() {
                   {item.label}
                 </span>
                 {!item.done && (
-                  item.comingSoon ? (
-                    <span className="text-xs text-gray-400 font-medium">Coming soon</span>
-                  ) : (
-                    <Link
-                      href={item.href}
-                      className="text-xs font-semibold text-blue-600 hover:text-blue-700"
-                    >
-                      {item.cta} →
-                    </Link>
-                  )
+                  <Link
+                    href={item.href}
+                    className="text-xs font-semibold text-blue-600 hover:text-blue-700"
+                  >
+                    {item.cta} →
+                  </Link>
                 )}
                 {item.done && (
                   <Link href={item.href} className="text-xs text-gray-400 hover:text-gray-600">
@@ -204,8 +204,62 @@ export default async function DashboardPage() {
           </section>
         )}
 
+        {/* Goals section */}
+        <section className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+            <h2 className="font-semibold text-gray-900">Goals</h2>
+            <Link href="/goals/new" className="text-sm font-semibold text-blue-600 hover:text-blue-700">
+              + New goal
+            </Link>
+          </div>
+          {goals.length === 0 ? (
+            <div className="px-6 py-10 text-center">
+              <p className="text-sm text-gray-500">No goals yet.</p>
+              <Link href="/goals/new" className="mt-2 inline-block text-sm font-medium text-blue-600 hover:text-blue-700">
+                Create your first goal →
+              </Link>
+            </div>
+          ) : (
+            <ul className="divide-y divide-gray-100">
+              {goals.map((g) => {
+                const scoreColor =
+                  g.smartScore >= 4 ? "bg-green-100 text-green-700" :
+                  g.smartScore >= 2 ? "bg-yellow-100 text-yellow-700" :
+                  "bg-gray-100 text-gray-500";
+                return (
+                  <li key={g.id}>
+                    <Link href={`/goals/${g.id}`} className="flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition-colors">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">{g.title}</p>
+                        {g.deadline && (
+                          <p className="text-xs text-gray-400 mt-0.5">
+                            Due {new Date(g.deadline).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${scoreColor}`}>
+                          {g.smartScore}/5
+                        </span>
+                        {g.workspaceType === "family" && (
+                          <span className="inline-flex items-center rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-700">
+                            family
+                          </span>
+                        )}
+                        <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                        </svg>
+                      </div>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
+
         {/* Coming-soon feature cards */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {[
             {
               title: "Today's Habits",
@@ -213,13 +267,6 @@ export default async function DashboardPage() {
               icon: <svg className="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" /></svg>,
               bg: "bg-orange-50",
               phase: "Phase 6",
-            },
-            {
-              title: "Active Goals",
-              description: "Create SMART goals with milestones and AI coaching.",
-              icon: <svg className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" /></svg>,
-              bg: "bg-blue-50",
-              phase: "Phase 3",
             },
             {
               title: "Sprint Board",

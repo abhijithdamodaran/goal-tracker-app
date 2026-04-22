@@ -173,8 +173,9 @@ Models currently in `prisma/schema.prisma`:
 | `InviteCode` | 8-char invite codes; single-use, 7-day expiry |
 | `Habit` | Recurring habit with streak config and denormalised streak state |
 | `HabitCheckIn` | Daily check-in record; offline-sync via `syncStatus` field |
+| `Goal` | SMART goal with title, description, metric/target/unit, reflection, deadline, smartScore, workspaceType |
 
-Not yet added (future phases): Goal, Milestone, Cycle, ActionItem, Sprint, AICoachSuggestion.
+Not yet added (future phases): Milestone, Cycle, ActionItem, Sprint, AICoachSuggestion.
 
 ---
 
@@ -191,6 +192,12 @@ Not yet added (future phases): Goal, Milestone, Cycle, ActionItem, Sprint, AICoa
 | `/invite/[code]` | page | Shareable invite deep-link (public, redirects to sign-in if needed) |
 | `/api/habits/[habitId]/check-ins` | GET/POST | Habit check-ins with offline sync |
 | `/api/cron/process-missed-streaks` | POST | Cron job: process missed streak occurrences |
+| `/api/goals` | GET/POST | List goals (personal + family) / create goal |
+| `/api/goals/[id]` | GET/PATCH/DELETE | Get, update, or soft-delete a goal |
+| `/api/auth/register` | POST | Register new user (email + password) |
+| `/goals/new` | page | Goal creation form with live SMART scoring |
+| `/goals/[id]` | page | Goal detail with SMART analysis |
+| `/goals/[id]/edit` | page | Edit goal form |
 
 ---
 
@@ -243,7 +250,7 @@ Legend: ✅ Complete · 🔄 In progress · ⬜ Not started
 
 ---
 
-## Phase 3 — Goals + SMART Scoring ⬜
+## Phase 3 — Goals + SMART Scoring ✅
 
 **Goal:** Users can create well-formed SMART goals with advisory scoring.
 
@@ -262,6 +269,13 @@ Legend: ✅ Complete · 🔄 In progress · ⬜ Not started
 **DB additions:** Goal model (title, description, metric, targetValue, unit, deadline, smartScore, workspaceType [personal|family], workspaceId, ownerId, archivedAt)
 
 **Acceptance:** AC 1 (partial) — create SMART goal and see score ≥ 4/5.
+
+**Implementation notes:**
+- SMART scoring in `src/lib/smart-score.ts` — S: title≥10 chars + description, M: metric+targetValue+unit, A: reflection≥20 chars, R: reflection≥60 chars, T: deadline set
+- Goal creation at `/goals/new`, edit at `/goals/[id]/edit`, detail at `/goals/[id]`
+- Score sidebar updates live as user types (client-side `computeSmartScore`)
+- Family goals validated by checking `FamilyMember` membership
+- Soft-delete via `archivedAt` field; archived goals excluded from all queries
 
 ---
 
