@@ -30,14 +30,12 @@ export default function ActionItemDetailPage() {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  // Edit form
   const [editing, setEditing] = useState(false);
   const [editTitle, setEditTitle] = useState("");
   const [editDesc, setEditDesc] = useState("");
   const [editDueDate, setEditDueDate] = useState("");
   const [editError, setEditError] = useState("");
 
-  // Sprint assignment
   const [sprints, setSprints] = useState<SprintOption[]>([]);
   const [showSprintPicker, setShowSprintPicker] = useState(false);
   const [sprintLoading, setSprintLoading] = useState(false);
@@ -126,77 +124,75 @@ export default function ActionItemDetailPage() {
   }
 
   if (loading) return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+    <div className="min-h-screen bg-[#f6fafe] flex items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#00152a] border-t-transparent" />
     </div>
   );
   if (!item) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="border-b border-gray-200 bg-white px-4 py-4 shadow-sm">
-        <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <Link href="/action-items" className="hover:text-gray-700">Action Items</Link>
-            {item.milestone && (
-              <>
-                <span>/</span>
-                <Link href={`/milestones/${item.milestone.id}`} className="hover:text-gray-700 truncate max-w-32">{item.milestone.title}</Link>
-              </>
-            )}
-          </div>
-          <button
-            onClick={toggleDone}
-            disabled={saving}
-            className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition disabled:opacity-60 ${
-              item.done
-                ? "bg-green-100 text-green-700 hover:bg-green-200"
-                : "bg-blue-600 text-white hover:bg-blue-700"
-            }`}
-          >
-            {saving ? "…" : item.done ? "✓ Done" : "Mark done"}
-          </button>
+    <div className="min-h-screen bg-[#f6fafe]">
+      <header className="sticky top-0 z-30 bg-white border-b border-[#DCE3E8] px-6 h-14 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-sm text-[#74777e]">
+          <Link href="/action-items" className="hover:text-[#43474d]">Action Items</Link>
+          {item.milestone && (
+            <>
+              <span className="text-[#DCE3E8]">/</span>
+              <Link href={`/milestones/${item.milestone.id}`} className="hover:text-[#43474d] truncate max-w-32">{item.milestone.title}</Link>
+            </>
+          )}
         </div>
+        <button
+          onClick={toggleDone}
+          disabled={saving}
+          className={`rounded-md px-3 py-1.5 text-xs font-semibold transition disabled:opacity-60 ${
+            item.done
+              ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200"
+              : "bg-[#00152a] text-white hover:bg-[#102a43]"
+          }`}
+        >
+          {saving ? "…" : item.done ? "✓ Done" : "Mark done"}
+        </button>
       </header>
 
-      <main className="mx-auto max-w-3xl px-4 py-8 space-y-4">
+      <main className="mx-auto max-w-3xl px-6 py-8 space-y-4">
         {/* Main card */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-lg border border-[#DCE3E8] bg-white p-6">
           {editing ? (
             <form onSubmit={saveEdits} className="space-y-4">
               {editError && <p className="text-xs text-red-600">{editError}</p>}
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Title</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#74777e] mb-1.5">Title</label>
                 <input
                   autoFocus
                   value={editTitle}
                   onChange={(e) => { setEditTitle(e.target.value); if (editError) setEditError(""); }}
-                  className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="block w-full rounded-md border border-[#DCE3E8] px-3 py-2 text-sm focus:border-[#00152a] focus:outline-none focus:ring-1 focus:ring-[#00152a]"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Description</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#74777e] mb-1.5">Description</label>
                 <textarea
                   value={editDesc}
                   onChange={(e) => setEditDesc(e.target.value)}
                   rows={3}
-                  className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+                  className="block w-full rounded-md border border-[#DCE3E8] px-3 py-2 text-sm focus:border-[#00152a] focus:outline-none focus:ring-1 focus:ring-[#00152a] resize-none"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Due date</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#74777e] mb-1.5">Due date</label>
                 <input
                   type="date"
                   value={editDueDate}
                   onChange={(e) => setEditDueDate(e.target.value)}
-                  className="block rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="block rounded-md border border-[#DCE3E8] px-3 py-2 text-sm focus:border-[#00152a] focus:outline-none focus:ring-1 focus:ring-[#00152a]"
                 />
               </div>
               <div className="flex gap-2 pt-1">
-                <button type="submit" disabled={saving} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60">
+                <button type="submit" disabled={saving} className="rounded-md bg-[#00152a] px-4 py-2 text-xs font-semibold text-white hover:bg-[#102a43] disabled:opacity-60">
                   {saving ? "Saving…" : "Save"}
                 </button>
-                <button type="button" onClick={() => { setEditing(false); setEditError(""); }} className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                <button type="button" onClick={() => { setEditing(false); setEditError(""); }} className="rounded-md border border-[#DCE3E8] px-4 py-2 text-xs text-[#43474d] hover:bg-slate-50">
                   Cancel
                 </button>
               </div>
@@ -204,12 +200,12 @@ export default function ActionItemDetailPage() {
           ) : (
             <div>
               <div className="flex items-start justify-between gap-3">
-                <h1 className={`text-2xl font-bold ${item.done ? "text-gray-400 line-through" : "text-gray-900"}`}>{item.title}</h1>
-                <button onClick={() => setEditing(true)} className="shrink-0 text-sm text-gray-500 hover:text-gray-700">Edit</button>
+                <h1 className={`text-2xl font-semibold tracking-tight ${item.done ? "text-[#74777e] line-through" : "text-[#171c1f]"}`}>{item.title}</h1>
+                <button onClick={() => setEditing(true)} className="shrink-0 text-xs font-medium text-[#43474d] hover:text-[#171c1f] border border-[#DCE3E8] px-2.5 py-1 rounded-md hover:bg-slate-50">Edit</button>
               </div>
-              {item.description && <p className="text-sm text-gray-600 mt-2">{item.description}</p>}
+              {item.description && <p className="text-sm text-[#43474d] mt-2">{item.description}</p>}
               {item.dueDate && (
-                <p className={`text-sm mt-2 ${new Date(item.dueDate) < new Date() && !item.done ? "text-red-600 font-medium" : "text-gray-500"}`}>
+                <p className={`text-sm mt-2 ${new Date(item.dueDate) < new Date() && !item.done ? "text-red-600 font-medium" : "text-[#74777e]"}`}>
                   Due {new Date(item.dueDate).toLocaleDateString(undefined, { weekday: "short", month: "long", day: "numeric", year: "numeric" })}
                 </p>
               )}
@@ -218,62 +214,62 @@ export default function ActionItemDetailPage() {
         </div>
 
         {/* Context */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm space-y-3">
-          <h2 className="text-sm font-semibold text-gray-900">Context</h2>
+        <div className="rounded-lg border border-[#DCE3E8] bg-white p-5 space-y-3">
+          <h2 className="text-[10px] font-bold uppercase tracking-wider text-[#74777e]">Context</h2>
           <div className="space-y-2 text-sm">
             {item.milestone ? (
               <>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-400 w-20 shrink-0">Goal</span>
-                  <Link href={`/goals/${item.milestone.goal.id}`} className="font-medium text-blue-600 hover:underline truncate">{item.milestone.goal.title}</Link>
+                  <span className="text-[10px] text-[#74777e] w-20 shrink-0">Goal</span>
+                  <Link href={`/goals/${item.milestone.goal.id}`} className="font-medium text-[#00152a] hover:underline truncate">{item.milestone.goal.title}</Link>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-400 w-20 shrink-0">Milestone</span>
-                  <Link href={`/milestones/${item.milestone.id}`} className="font-medium text-blue-600 hover:underline truncate">{item.milestone.title}</Link>
+                  <span className="text-[10px] text-[#74777e] w-20 shrink-0">Milestone</span>
+                  <Link href={`/milestones/${item.milestone.id}`} className="font-medium text-[#00152a] hover:underline truncate">{item.milestone.title}</Link>
                 </div>
               </>
             ) : (
-              <p className="text-gray-400 text-xs">Not linked to a milestone.</p>
+              <p className="text-[#74777e] text-xs">Not linked to a milestone.</p>
             )}
           </div>
         </div>
 
         {/* Sprint assignment */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm space-y-3">
+        <div className="rounded-lg border border-[#DCE3E8] bg-white p-5 space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-gray-900">Sprint</h2>
+            <h2 className="text-[10px] font-bold uppercase tracking-wider text-[#74777e]">Sprint</h2>
             <button
               onClick={() => {
                 setShowSprintPicker((v) => !v);
                 if (!showSprintPicker && sprints.length === 0) loadSprints();
               }}
-              className="text-xs font-medium text-blue-600 hover:text-blue-700"
+              className="text-xs font-medium text-[#00152a] hover:underline"
             >
               {showSprintPicker ? "Cancel" : item.sprint ? "Change" : "Assign"}
             </button>
           </div>
           {item.sprint ? (
             <div className="flex items-center justify-between">
-              <Link href={`/sprints/${item.sprint.id}`} className="text-sm font-medium text-blue-600 hover:underline">{item.sprint.name}</Link>
+              <Link href={`/sprints/${item.sprint.id}`} className="text-sm font-medium text-[#00152a] hover:underline">{item.sprint.name}</Link>
               <button
                 onClick={() => assignSprint(null)}
                 disabled={saving}
-                className="text-xs text-gray-400 hover:text-red-500 disabled:opacity-60"
+                className="text-xs text-[#74777e] hover:text-red-500 disabled:opacity-60"
               >
                 Remove
               </button>
             </div>
           ) : (
-            <p className="text-sm text-gray-400">Not assigned to a sprint.</p>
+            <p className="text-sm text-[#74777e]">Not assigned to a sprint.</p>
           )}
           {showSprintPicker && (
-            <div className="border border-gray-200 rounded-lg overflow-hidden">
+            <div className="border border-[#DCE3E8] rounded-md overflow-hidden">
               {sprintLoading ? (
-                <div className="px-4 py-3 text-xs text-gray-400">Loading…</div>
+                <div className="px-4 py-3 text-xs text-[#74777e]">Loading…</div>
               ) : sprints.length === 0 ? (
-                <div className="px-4 py-3 text-xs text-gray-400">No sprints found. <Link href="/sprints/new" className="text-blue-600 hover:underline">Create one →</Link></div>
+                <div className="px-4 py-3 text-xs text-[#74777e]">No sprints found. <Link href="/sprints/new" className="text-[#00152a] hover:underline">Create one →</Link></div>
               ) : (
-                <ul className="divide-y divide-gray-100 max-h-48 overflow-y-auto">
+                <ul className="divide-y divide-[#DCE3E8] max-h-48 overflow-y-auto">
                   {sprints.map((s) => {
                     const isActive = item.sprint?.id === s.id;
                     const now = new Date();
@@ -283,12 +279,12 @@ export default function ActionItemDetailPage() {
                         <button
                           onClick={() => assignSprint(s.id)}
                           disabled={saving}
-                          className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 flex items-center justify-between disabled:opacity-60 ${isActive ? "bg-blue-50" : ""}`}
+                          className={`w-full text-left px-4 py-2.5 text-sm hover:bg-slate-50 flex items-center justify-between disabled:opacity-60 ${isActive ? "bg-slate-100" : ""}`}
                         >
-                          <span className={isActive ? "text-blue-700 font-medium" : "text-gray-800"}>{s.name}</span>
+                          <span className={isActive ? "text-[#171c1f] font-medium" : "text-[#43474d]"}>{s.name}</span>
                           <div className="flex items-center gap-2">
-                            {isCurrent && <span className="text-xs text-blue-600">Current</span>}
-                            {isActive && <span className="text-xs text-green-600">Assigned</span>}
+                            {isCurrent && <span className="text-[10px] font-bold uppercase tracking-wide text-[#00152a]">Current</span>}
+                            {isActive && <span className="text-[10px] font-bold uppercase tracking-wide text-emerald-600">Assigned</span>}
                           </div>
                         </button>
                       </li>
@@ -301,10 +297,10 @@ export default function ActionItemDetailPage() {
         </div>
 
         {/* Danger */}
-        <div className="rounded-2xl border border-red-200 bg-white p-5 shadow-sm">
-          <h2 className="text-sm font-semibold text-red-700 mb-3">Danger zone</h2>
+        <div className="rounded-lg border border-red-200 bg-white p-5">
+          <h2 className="text-[10px] font-bold uppercase tracking-wider text-red-600 mb-3">Danger zone</h2>
           <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-700">Delete this action item</p>
+            <p className="text-sm text-[#43474d]">Delete this action item</p>
             <button onClick={handleDelete} disabled={deleting} className="text-sm font-medium text-red-600 hover:text-red-700 disabled:opacity-60">
               {deleting ? "Deleting…" : "Delete"}
             </button>

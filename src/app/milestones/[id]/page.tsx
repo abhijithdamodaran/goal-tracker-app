@@ -35,7 +35,6 @@ export default function MilestoneDetailPage() {
   const [toggling, setToggling] = useState<string | null>(null);
   const [completing, setCompleting] = useState(false);
 
-  // Add item inline
   const [showAdd, setShowAdd] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [addError, setAddError] = useState("");
@@ -108,8 +107,8 @@ export default function MilestoneDetailPage() {
   }
 
   if (loading) return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+    <div className="min-h-screen bg-[#f6fafe] flex items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#00152a] border-t-transparent" />
     </div>
   );
   if (!milestone) return null;
@@ -119,68 +118,66 @@ export default function MilestoneDetailPage() {
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="border-b border-gray-200 bg-white px-4 py-4 shadow-sm">
-        <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <Link href="/goals" className="hover:text-gray-700">Goals</Link>
-            <span>/</span>
-            <Link href={`/goals/${milestone.goal.id}`} className="hover:text-gray-700 truncate max-w-32">{milestone.goal.title}</Link>
-            <span>/</span>
-            <span className="text-gray-700 truncate max-w-32">{milestone.title}</span>
-          </div>
-          <button
-            onClick={toggleComplete}
-            disabled={completing}
-            className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition disabled:opacity-60 ${
-              milestone.completedAt
-                ? "bg-green-100 text-green-700 hover:bg-green-200"
-                : "bg-blue-600 text-white hover:bg-blue-700"
-            }`}
-          >
-            {completing ? "…" : milestone.completedAt ? "✓ Complete" : "Mark complete"}
-          </button>
+    <div className="min-h-screen bg-[#f6fafe]">
+      <header className="sticky top-0 z-30 bg-white border-b border-[#DCE3E8] px-6 h-14 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-sm text-[#74777e]">
+          <Link href="/goals" className="hover:text-[#43474d]">Goals</Link>
+          <span className="text-[#DCE3E8]">/</span>
+          <Link href={`/goals/${milestone.goal.id}`} className="hover:text-[#43474d] truncate max-w-32">{milestone.goal.title}</Link>
+          <span className="text-[#DCE3E8]">/</span>
+          <span className="text-[#171c1f] font-medium truncate max-w-32">{milestone.title}</span>
         </div>
+        <button
+          onClick={toggleComplete}
+          disabled={completing}
+          className={`rounded-md px-3 py-1.5 text-xs font-semibold transition disabled:opacity-60 ${
+            milestone.completedAt
+              ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200"
+              : "bg-[#00152a] text-white hover:bg-[#102a43]"
+          }`}
+        >
+          {completing ? "…" : milestone.completedAt ? "✓ Complete" : "Mark complete"}
+        </button>
       </header>
 
-      <main className="mx-auto max-w-3xl px-4 py-8 space-y-4">
+      <main className="mx-auto max-w-3xl px-6 py-8 space-y-4">
         {/* Milestone header */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm space-y-3">
-          <h1 className={`text-2xl font-bold ${milestone.completedAt ? "text-gray-400 line-through" : "text-gray-900"}`}>
+        <div className="rounded-lg border border-[#DCE3E8] bg-white p-6 space-y-3">
+          <h1 className={`text-2xl font-semibold tracking-tight ${milestone.completedAt ? "text-[#74777e] line-through" : "text-[#171c1f]"}`}>
             {milestone.title}
           </h1>
-          {milestone.description && <p className="text-sm text-gray-600">{milestone.description}</p>}
+          {milestone.description && <p className="text-sm text-[#43474d]">{milestone.description}</p>}
           {total > 0 && (
             <div className="space-y-1.5 pt-1">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">{done}/{total} items done</span>
-                <span className="font-semibold text-gray-900">{pct}%</span>
+                <span className="text-[#43474d]">{done}/{total} items done</span>
+                <span className="font-semibold text-[#171c1f]">{pct}%</span>
               </div>
-              <div className="h-2 w-full rounded-full bg-gray-100">
-                <div className={`h-2 rounded-full transition-all ${pct === 100 ? "bg-green-500" : "bg-blue-500"}`} style={{ width: `${pct}%` }} />
+              <div className="h-1.5 w-full rounded-full bg-slate-100">
+                <div className={`h-1.5 rounded-full transition-all ${pct === 100 ? "bg-emerald-500" : "bg-[#00152a]"}`} style={{ width: `${pct}%` }} />
               </div>
             </div>
           )}
         </div>
 
         {/* Context */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm space-y-2">
-          <h2 className="text-sm font-semibold text-gray-900 mb-2">Context</h2>
+        <div className="rounded-lg border border-[#DCE3E8] bg-white p-5 space-y-2">
+          <h2 className="text-[10px] font-bold uppercase tracking-wider text-[#74777e] mb-3">Context</h2>
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-xs text-gray-400 w-16 shrink-0">Goal</span>
-            <Link href={`/goals/${milestone.goal.id}`} className="font-medium text-blue-600 hover:underline truncate">{milestone.goal.title}</Link>
+            <span className="text-[10px] text-[#74777e] w-16 shrink-0">Goal</span>
+            <Link href={`/goals/${milestone.goal.id}`} className="font-medium text-[#00152a] hover:underline truncate">{milestone.goal.title}</Link>
             {milestone.goal.workspaceType === "family" && (
-              <span className="ml-1 inline-flex items-center rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-700">Family</span>
+              <span className="ml-1 inline-flex items-center rounded-md bg-purple-50 px-1.5 py-0.5 text-[10px] font-medium text-purple-700">Family</span>
             )}
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-xs text-gray-400 w-16 shrink-0">Cycle</span>
-            <Link href={`/cycles/${milestone.cycle.id}`} className="font-medium text-blue-600 hover:underline">{milestone.cycle.name}</Link>
-            <span className="text-xs text-gray-400">{CYCLE_TYPE_LABEL[milestone.cycle.type] ?? milestone.cycle.type}</span>
+            <span className="text-[10px] text-[#74777e] w-16 shrink-0">Cycle</span>
+            <Link href={`/cycles/${milestone.cycle.id}`} className="font-medium text-[#00152a] hover:underline">{milestone.cycle.name}</Link>
+            <span className="text-[10px] text-[#74777e]">{CYCLE_TYPE_LABEL[milestone.cycle.type] ?? milestone.cycle.type}</span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-xs text-gray-400 w-16 shrink-0">Dates</span>
-            <span className="text-gray-600">
+            <span className="text-[10px] text-[#74777e] w-16 shrink-0">Dates</span>
+            <span className="text-[#43474d]">
               {new Date(milestone.cycle.startDate).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
               {" – "}
               {new Date(milestone.cycle.endDate).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
@@ -189,29 +186,29 @@ export default function MilestoneDetailPage() {
         </div>
 
         {/* Action items */}
-        <section className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-900">Action items</h2>
-            <button onClick={() => setShowAdd((v) => !v)} className="text-sm font-semibold text-blue-600 hover:text-blue-700">
+        <section className="rounded-lg border border-[#DCE3E8] bg-white overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-[#DCE3E8]">
+            <h2 className="text-sm font-semibold text-[#171c1f]">Action items</h2>
+            <button onClick={() => setShowAdd((v) => !v)} className="text-xs font-medium text-[#00152a] hover:underline">
               {showAdd ? "Cancel" : "+ Add"}
             </button>
           </div>
 
           {showAdd && (
-            <form onSubmit={handleAddItem} className="px-5 py-4 bg-blue-50 border-b border-gray-100 space-y-3">
+            <form onSubmit={handleAddItem} className="px-5 py-4 bg-slate-50 border-b border-[#DCE3E8] space-y-3">
               {addError && <p className="text-xs text-red-600">{addError}</p>}
               <input
                 autoFocus
                 value={newTitle}
                 onChange={(e) => { setNewTitle(e.target.value); if (addError) setAddError(""); }}
                 placeholder="What needs to get done?"
-                className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="block w-full rounded-md border border-[#DCE3E8] px-3 py-2 text-sm focus:border-[#00152a] focus:outline-none focus:ring-1 focus:ring-[#00152a]"
               />
               <div className="flex gap-2">
-                <button type="submit" disabled={addLoading} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60">
+                <button type="submit" disabled={addLoading} className="rounded-md bg-[#00152a] px-4 py-2 text-xs font-semibold text-white hover:bg-[#102a43] disabled:opacity-60">
                   {addLoading ? "Adding…" : "Add"}
                 </button>
-                <button type="button" onClick={() => { setShowAdd(false); setAddError(""); }} className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                <button type="button" onClick={() => { setShowAdd(false); setAddError(""); }} className="rounded-md border border-[#DCE3E8] px-4 py-2 text-xs text-[#43474d] hover:bg-slate-50">
                   Cancel
                 </button>
               </div>
@@ -220,17 +217,17 @@ export default function MilestoneDetailPage() {
 
           {milestone.actionItems.length === 0 ? (
             <div className="px-5 py-8 text-center">
-              <p className="text-sm text-gray-500">No action items yet.</p>
+              <p className="text-sm text-[#74777e]">No action items yet.</p>
             </div>
           ) : (
-            <ul className="divide-y divide-gray-100">
+            <ul className="divide-y divide-[#DCE3E8]">
               {milestone.actionItems.map((item) => (
-                <li key={item.id} className="flex items-center gap-3 px-5 py-3 group hover:bg-gray-50 transition-colors">
+                <li key={item.id} className="flex items-center gap-3 px-5 py-3 group hover:bg-slate-50 transition-colors">
                   <button
                     onClick={() => toggleActionItem(item)}
                     disabled={toggling === item.id}
-                    className={`h-5 w-5 shrink-0 rounded-full border-2 flex items-center justify-center transition disabled:opacity-60 ${
-                      item.done ? "border-green-500 bg-green-500" : "border-gray-300 hover:border-green-400"
+                    className={`h-5 w-5 shrink-0 rounded border-2 flex items-center justify-center transition disabled:opacity-60 ${
+                      item.done ? "border-emerald-500 bg-emerald-500" : "border-[#DCE3E8] hover:border-[#00152a]"
                     }`}
                   >
                     {item.done && (
@@ -240,23 +237,23 @@ export default function MilestoneDetailPage() {
                     )}
                   </button>
                   <div className="flex-1 min-w-0">
-                    <Link href={`/action-items/${item.id}`} className={`text-sm font-medium hover:underline ${item.done ? "text-gray-400 line-through" : "text-gray-800"}`}>
+                    <Link href={`/action-items/${item.id}`} className={`text-sm font-medium hover:underline ${item.done ? "text-[#74777e] line-through" : "text-[#171c1f]"}`}>
                       {item.title}
                     </Link>
                     {item.sprint && (
-                      <p className="text-xs text-gray-400 mt-0.5">
+                      <p className="text-[10px] text-[#74777e] mt-0.5">
                         <Link href={`/sprints/${item.sprint.id}`} className="hover:underline">{item.sprint.name}</Link>
                       </p>
                     )}
                   </div>
                   {item.dueDate && (
-                    <span className={`text-xs shrink-0 ${new Date(item.dueDate) < new Date() && !item.done ? "text-red-500 font-medium" : "text-gray-400"}`}>
+                    <span className={`text-xs shrink-0 ${new Date(item.dueDate) < new Date() && !item.done ? "text-red-500 font-medium" : "text-[#74777e]"}`}>
                       {new Date(item.dueDate).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
                     </span>
                   )}
                   <button
                     onClick={() => deleteItem(item.id)}
-                    className="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 transition shrink-0"
+                    className="opacity-0 group-hover:opacity-100 text-[#74777e] hover:text-red-500 transition shrink-0"
                     title="Delete"
                   >
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">

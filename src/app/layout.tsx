@@ -1,18 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 import { AppNav } from "@/components/AppNav";
 import { auth } from "@/lib/auth";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -32,14 +28,11 @@ export default async function RootLayout({
     : null;
 
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
+    <html lang="en" className={`${inter.variable} h-full antialiased`}>
+      <body className="min-h-full bg-[#f6fafe]">
         <SessionProvider>
           <AppNav user={user} />
-          <div className="flex-1 pb-16 sm:pb-0">
+          <div className="md:ml-64 pb-16 md:pb-0 min-h-screen">
             {children}
           </div>
         </SessionProvider>

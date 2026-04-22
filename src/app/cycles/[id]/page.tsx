@@ -11,10 +11,10 @@ const TYPE_LABELS: Record<string, string> = {
 };
 
 const TYPE_COLORS: Record<string, string> = {
-  monthly: "bg-blue-100 text-blue-700",
-  quarterly: "bg-purple-100 text-purple-700",
-  "half-yearly": "bg-orange-100 text-orange-700",
-  yearly: "bg-green-100 text-green-700",
+  monthly: "bg-blue-50 text-blue-700",
+  quarterly: "bg-purple-50 text-purple-700",
+  "half-yearly": "bg-amber-50 text-amber-700",
+  yearly: "bg-emerald-50 text-emerald-700",
 };
 
 export default async function CycleDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -27,7 +27,6 @@ export default async function CycleDetailPage({ params }: { params: Promise<{ id
   const cycle = await prisma.cycle.findUnique({ where: { id } });
   if (!cycle) notFound();
 
-  // Check access
   let hasAccess = cycle.ownerId === userId;
   if (!hasAccess && cycle.workspaceType === "family" && cycle.workspaceId) {
     const m = await prisma.familyMember.findFirst({ where: { userId, workspaceId: cycle.workspaceId } });
@@ -41,7 +40,6 @@ export default async function CycleDetailPage({ params }: { params: Promise<{ id
     orderBy: [{ goal: { title: "asc" } }, { createdAt: "asc" }],
   });
 
-  // Group by goal
   const byGoal = new Map<string, { goal: typeof milestones[0]["goal"]; milestones: typeof milestones }>();
   for (const m of milestones) {
     if (!byGoal.has(m.goalId)) byGoal.set(m.goalId, { goal: m.goal, milestones: [] });
@@ -56,30 +54,28 @@ export default async function CycleDetailPage({ params }: { params: Promise<{ id
   const isActive = new Date(cycle.startDate) <= now && new Date(cycle.endDate) >= now;
   const isPast = new Date(cycle.endDate) < now;
 
-  const color = TYPE_COLORS[cycle.type] ?? "bg-gray-100 text-gray-600";
+  const color = TYPE_COLORS[cycle.type] ?? "bg-slate-100 text-[#74777e]";
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="border-b border-gray-200 bg-white px-4 py-4 shadow-sm">
-        <div className="mx-auto flex max-w-4xl items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/cycles" className="text-sm text-gray-500 hover:text-gray-700">← Cycles</Link>
-            <span className="text-gray-300">/</span>
-            <span className="text-sm text-gray-700 truncate max-w-40">{cycle.name}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            {isActive && <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">Active</span>}
-            {isPast && <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-500">Past</span>}
-            <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${color}`}>{TYPE_LABELS[cycle.type]}</span>
-          </div>
+    <div className="min-h-screen bg-[#f6fafe]">
+      <header className="sticky top-0 z-30 bg-white border-b border-[#DCE3E8] px-6 h-14 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-sm text-[#74777e]">
+          <Link href="/cycles" className="hover:text-[#43474d]">Cycles</Link>
+          <span className="text-[#DCE3E8]">/</span>
+          <span className="text-[#171c1f] font-medium truncate max-w-40">{cycle.name}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          {isActive && <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700">Active</span>}
+          {isPast && <span className="rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-[#74777e]">Past</span>}
+          <span className={`rounded-md px-2 py-0.5 text-xs font-medium ${color}`}>{TYPE_LABELS[cycle.type]}</span>
         </div>
       </header>
 
-      <main className="mx-auto max-w-4xl px-4 py-8 space-y-6">
+      <main className="mx-auto max-w-4xl px-6 py-8 space-y-6">
         {/* Cycle header */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm space-y-3">
-          <h1 className="text-2xl font-bold text-gray-900">{cycle.name}</h1>
-          <p className="text-sm text-gray-500">
+        <div className="rounded-lg border border-[#DCE3E8] bg-white p-6 space-y-3">
+          <h1 className="text-2xl font-semibold text-[#171c1f] tracking-tight">{cycle.name}</h1>
+          <p className="text-sm text-[#74777e]">
             {new Date(cycle.startDate).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}
             {" — "}
             {new Date(cycle.endDate).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}
@@ -87,12 +83,12 @@ export default async function CycleDetailPage({ params }: { params: Promise<{ id
           {totalCount > 0 && (
             <div className="space-y-1.5 pt-1">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">{completedCount} of {totalCount} milestones completed</span>
-                <span className="font-semibold text-gray-900">{pct}%</span>
+                <span className="text-[#43474d]">{completedCount} of {totalCount} milestones completed</span>
+                <span className="font-semibold text-[#171c1f]">{pct}%</span>
               </div>
-              <div className="h-2 w-full rounded-full bg-gray-100">
+              <div className="h-1.5 w-full rounded-full bg-slate-100">
                 <div
-                  className={`h-2 rounded-full transition-all ${pct === 100 ? "bg-green-500" : "bg-blue-500"}`}
+                  className={`h-1.5 rounded-full transition-all ${pct === 100 ? "bg-emerald-500" : "bg-[#00152a]"}`}
                   style={{ width: `${pct}%` }}
                 />
               </div>
@@ -102,10 +98,10 @@ export default async function CycleDetailPage({ params }: { params: Promise<{ id
 
         {/* Milestones by goal */}
         {byGoal.size === 0 ? (
-          <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-10 text-center space-y-2">
-            <p className="text-sm text-gray-500">No milestones in this cycle yet.</p>
-            <p className="text-xs text-gray-400">Go to a goal and add a milestone assigned to this cycle.</p>
-            <Link href="/goals/new" className="inline-block mt-2 text-sm font-medium text-blue-600 hover:text-blue-700">
+          <div className="rounded-lg border border-dashed border-[#DCE3E8] bg-white p-10 text-center space-y-2">
+            <p className="text-sm text-[#74777e]">No milestones in this cycle yet.</p>
+            <p className="text-xs text-[#74777e]">Go to a goal and add a milestone assigned to this cycle.</p>
+            <Link href="/goals/new" className="inline-block mt-2 text-sm font-medium text-[#00152a] hover:underline">
               Create a goal →
             </Link>
           </div>
@@ -113,21 +109,21 @@ export default async function CycleDetailPage({ params }: { params: Promise<{ id
           Array.from(byGoal.values()).map(({ goal, milestones: ms }) => {
             const doneCount = ms.filter((m) => m.completedAt).length;
             return (
-              <section key={goal.id} className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+              <section key={goal.id} className="rounded-lg border border-[#DCE3E8] bg-white overflow-hidden">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-[#DCE3E8]">
                   <Link href={`/goals/${goal.id}`} className="flex items-center gap-2 hover:underline">
-                    <span className="font-semibold text-gray-900">{goal.title}</span>
+                    <span className="text-sm font-semibold text-[#171c1f]">{goal.title}</span>
                     {goal.workspaceType === "family" && (
-                      <span className="rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-700">family</span>
+                      <span className="rounded-md bg-purple-50 px-1.5 py-0.5 text-[10px] font-medium text-purple-700">family</span>
                     )}
                   </Link>
-                  <span className="text-sm text-gray-500">{doneCount}/{ms.length}</span>
+                  <span className="text-xs text-[#74777e]">{doneCount}/{ms.length}</span>
                 </div>
-                <ul className="divide-y divide-gray-100">
+                <ul className="divide-y divide-[#DCE3E8]">
                   {ms.map((m) => (
                     <li key={m.id} className="flex items-center gap-4 px-6 py-3">
-                      <div className={`h-5 w-5 shrink-0 rounded-full border-2 flex items-center justify-center ${
-                        m.completedAt ? "border-green-500 bg-green-500" : "border-gray-300"
+                      <div className={`h-5 w-5 shrink-0 rounded border-2 flex items-center justify-center ${
+                        m.completedAt ? "border-emerald-500 bg-emerald-500" : "border-[#DCE3E8]"
                       }`}>
                         {m.completedAt && (
                           <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
@@ -135,11 +131,11 @@ export default async function CycleDetailPage({ params }: { params: Promise<{ id
                           </svg>
                         )}
                       </div>
-                      <span className={`flex-1 text-sm ${m.completedAt ? "text-gray-400 line-through" : "text-gray-800"}`}>
+                      <span className={`flex-1 text-sm ${m.completedAt ? "text-[#74777e] line-through" : "text-[#171c1f]"}`}>
                         {m.title}
                       </span>
                       {m.description && (
-                        <span className="text-xs text-gray-400 max-w-xs truncate hidden sm:block">{m.description}</span>
+                        <span className="text-xs text-[#74777e] max-w-xs truncate hidden sm:block">{m.description}</span>
                       )}
                     </li>
                   ))}

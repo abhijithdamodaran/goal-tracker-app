@@ -100,7 +100,11 @@ export default function HabitDetailPage() {
     router.push("/habits");
   }
 
-  if (loading) return <div className="flex h-64 items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" /></div>;
+  if (loading) return (
+    <div className="min-h-screen bg-[#f6fafe] flex items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#00152a] border-t-transparent" />
+    </div>
+  );
   if (!habit) return null;
 
   const scheduledDays: number[] = (() => { try { return JSON.parse(habit.scheduledDays); } catch { return [0,1,2,3,4,5,6]; } })();
@@ -110,36 +114,34 @@ export default function HabitDetailPage() {
   const isScheduledToday = scheduledDays.includes(dow);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="border-b border-gray-200 bg-white px-4 py-4 shadow-sm">
-        <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/habits" className="text-sm text-gray-500 hover:text-gray-700">← Habits</Link>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-              habit.streakCount >= 7 ? "bg-orange-100 text-orange-700" : habit.streakCount >= 3 ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-500"
-            }`}>🔥 {habit.streakCount} day streak</span>
-          </div>
+    <div className="min-h-screen bg-[#f6fafe]">
+      <header className="sticky top-0 z-30 bg-white border-b border-[#DCE3E8] px-6 h-14 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-sm text-[#74777e]">
+          <Link href="/habits" className="hover:text-[#43474d]">Habits</Link>
+          <span className="text-[#DCE3E8]">/</span>
+          <span className="text-[#171c1f] font-medium truncate max-w-48">{habit.title}</span>
         </div>
+        <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold ${
+          habit.streakCount >= 7 ? "bg-orange-50 text-orange-700" : habit.streakCount >= 3 ? "bg-[#00152a] text-white" : "bg-slate-100 text-[#74777e]"
+        }`}>🔥 {habit.streakCount} day streak</span>
       </header>
 
-      <main className="mx-auto max-w-3xl px-4 py-8 space-y-6">
+      <main className="mx-auto max-w-3xl px-6 py-8 space-y-6">
         {/* Title + check-in */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-lg border border-[#DCE3E8] bg-white p-6">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{habit.title}</h1>
-              {habit.description && <p className="text-sm text-gray-500 mt-1">{habit.description}</p>}
+              <h1 className="text-2xl font-semibold text-[#171c1f] tracking-tight">{habit.title}</h1>
+              {habit.description && <p className="text-sm text-[#74777e] mt-1">{habit.description}</p>}
             </div>
             {isScheduledToday && (
               <button
                 onClick={handleCheckIn}
                 disabled={checkingIn}
-                className={`shrink-0 rounded-xl px-5 py-2.5 text-sm font-semibold transition disabled:opacity-60 ${
+                className={`shrink-0 rounded-md px-5 py-2 text-sm font-semibold transition disabled:opacity-60 ${
                   isCheckedInToday
-                    ? "bg-green-100 text-green-700 hover:bg-green-200"
-                    : "bg-blue-600 text-white hover:bg-blue-700"
+                    ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200"
+                    : "bg-[#00152a] text-white hover:bg-[#102a43]"
                 }`}
               >
                 {checkingIn ? "…" : isCheckedInToday ? "✓ Done today" : "Check in"}
@@ -155,28 +157,28 @@ export default function HabitDetailPage() {
             { label: "Longest streak", value: `${habit.longestStreak}d` },
             { label: "Last completed", value: habit.lastCompletedDate ? new Date(habit.lastCompletedDate + "T12:00:00").toLocaleDateString(undefined, { month: "short", day: "numeric" }) : "—" },
           ].map((stat) => (
-            <div key={stat.label} className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm text-center">
-              <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-              <p className="text-xs text-gray-500 mt-0.5">{stat.label}</p>
+            <div key={stat.label} className="rounded-lg border border-[#DCE3E8] bg-white p-4 text-center">
+              <p className="text-2xl font-semibold text-[#171c1f] tracking-tight leading-none">{stat.value}</p>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#74777e] mt-1.5">{stat.label}</p>
             </div>
           ))}
         </div>
 
         {/* Config */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm space-y-3">
-          <h2 className="font-semibold text-gray-900 text-sm">Configuration</h2>
-          <div className="space-y-2 text-sm text-gray-600">
+        <div className="rounded-lg border border-[#DCE3E8] bg-white p-5 space-y-3">
+          <h2 className="text-[10px] font-bold uppercase tracking-wider text-[#74777e]">Configuration</h2>
+          <div className="space-y-2 text-sm text-[#43474d]">
             <div className="flex items-center gap-2">
-              <span className="text-gray-400 text-xs w-24 shrink-0">Schedule</span>
+              <span className="text-[#74777e] text-xs w-24 shrink-0">Schedule</span>
               <span className="font-medium">{scheduledDays.map(d => DAY_ABBR[d]).join(" · ")}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-gray-400 text-xs w-24 shrink-0">Mode</span>
+            <div className="flex items-start gap-2">
+              <span className="text-[#74777e] text-xs w-24 shrink-0 pt-0.5">Mode</span>
               <span className="font-medium">{STREAK_MODE_LABELS[habit.streakMode] ?? habit.streakMode}</span>
             </div>
             {habit.streakMode === "percentage-threshold" && (
               <div className="flex items-center gap-2">
-                <span className="text-gray-400 text-xs w-24 shrink-0">Threshold</span>
+                <span className="text-[#74777e] text-xs w-24 shrink-0">Threshold</span>
                 <span className="font-medium">{Math.round(habit.percentageThreshold * 100)}%</span>
               </div>
             )}
@@ -184,13 +186,12 @@ export default function HabitDetailPage() {
         </div>
 
         {/* History — last 28 days */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm space-y-3">
-          <h2 className="font-semibold text-gray-900 text-sm">Last 28 days</h2>
+        <div className="rounded-lg border border-[#DCE3E8] bg-white p-5 space-y-3">
+          <h2 className="text-[10px] font-bold uppercase tracking-wider text-[#74777e]">Last 28 days</h2>
           <div className="grid grid-cols-7 gap-1.5">
             {["Su","Mo","Tu","We","Th","Fr","Sa"].map((d) => (
-              <div key={d} className="text-center text-xs text-gray-400 font-medium pb-1">{d}</div>
+              <div key={d} className="text-center text-[10px] font-bold text-[#74777e] pb-1">{d}</div>
             ))}
-            {/* Padding for the first day of the 28-day window */}
             {Array.from({ length: new Date(last28[0] + "T12:00:00").getDay() }).map((_, i) => (
               <div key={`pad-${i}`} />
             ))}
@@ -204,25 +205,25 @@ export default function HabitDetailPage() {
                   key={date}
                   title={date}
                   className={`aspect-square rounded-md flex items-center justify-center text-xs font-medium ${
-                    completed ? "bg-green-500 text-white" :
+                    completed ? "bg-emerald-500 text-white" :
                     completed === false && scheduled ? "bg-red-100 text-red-400" :
-                    scheduled ? "bg-gray-100 text-gray-400" :
-                    "bg-gray-50 text-gray-300"
-                  } ${isToday ? "ring-2 ring-blue-400 ring-offset-1" : ""}`}
+                    scheduled ? "bg-slate-100 text-[#74777e]" :
+                    "bg-slate-50 text-slate-300"
+                  } ${isToday ? "ring-2 ring-[#00152a] ring-offset-1" : ""}`}
                 >
                   {d.getDate()}
                 </div>
               );
             })}
           </div>
-          <p className="text-xs text-gray-400">Green = completed · Red = missed · Gray = not scheduled</p>
+          <p className="text-[10px] text-[#74777e]">Green = completed · Red = missed · Gray = not scheduled</p>
         </div>
 
         {/* Archive */}
-        <div className="rounded-2xl border border-red-200 bg-white p-5 shadow-sm space-y-3">
-          <h2 className="font-semibold text-red-700 text-sm">Danger zone</h2>
+        <div className="rounded-lg border border-red-200 bg-white p-5 space-y-3">
+          <h2 className="text-[10px] font-bold uppercase tracking-wider text-red-600">Danger zone</h2>
           <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-700">Archive this habit</p>
+            <p className="text-sm text-[#43474d]">Archive this habit</p>
             <button onClick={handleArchive} disabled={archiving} className="text-sm font-medium text-red-600 hover:text-red-700 disabled:opacity-60">
               {archiving ? "Archiving…" : "Archive"}
             </button>

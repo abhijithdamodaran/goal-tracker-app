@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Action Items | FocusTrack</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#ad8a5a",
+                        "on-surface-variant": "#43474d",
+                        "inverse-surface": "#2c3134",
+                        "on-tertiary-fixed-variant": "#5d4119",
+                        "on-surface": "#171c1f",
+                        "inverse-on-surface": "#edf1f5",
+                        "surface-bright": "#f6fafe",
+                        "on-secondary-fixed": "#001d32",
+                        "surface-container-low": "#f0f4f8",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#aec9e7",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#b0c9e8",
+                        "primary-container": "#102a43",
+                        "inverse-primary": "#b0c9e8",
+                        "surface-dim": "#d6dade",
+                        "on-secondary-container": "#48637d",
+                        "on-primary-fixed-variant": "#314863",
+                        "surface-variant": "#dfe3e7",
+                        "surface-container-highest": "#dfe3e7",
+                        "secondary-fixed": "#cee5ff",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f6fafe",
+                        "on-primary-container": "#7a92b0",
+                        "tertiary-fixed": "#ffddb4",
+                        "tertiary-fixed-dim": "#e8c08c",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f6fafe",
+                        "primary": "#00152a",
+                        "on-tertiary-fixed": "#291800",
+                        "on-secondary-fixed-variant": "#2e4962",
+                        "outline-variant": "#c3c6ce",
+                        "surface-tint": "#49607c",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#3b2400",
+                        "on-primary-fixed": "#011d35",
+                        "primary-fixed": "#d1e4ff",
+                        "on-background": "#171c1f",
+                        "outline": "#74777e",
+                        "tertiary": "#201100",
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#e4e9ed",
+                        "secondary-container": "#c4e0fe",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#eaeef2",
+                        "secondary": "#46617b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "0.25rem",
+                        "unit": "8px",
+                        "md": "1rem",
+                        "xl": "2.5rem",
+                        "sm": "0.5rem",
+                        "container-max": "1280px",
+                        "xxl": "4rem",
+                        "gutter": "24px",
+                        "lg": "1.5rem"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "h1": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "h3": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h2": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                        "h1": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.03em", "fontWeight": "600"}],
+                        "h3": ["24px", {"lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                        "h2": ["30px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- SideNavBar (Authority: JSON & Contextual Logic) -->
+<aside class="fixed left-0 top-0 h-screen w-64 z-50 bg-white border-r border-slate-200 flex flex-col p-6 space-y-2">
+<div class="flex items-center space-x-3 mb-6">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm" data-icon="grid_view">grid_view</span>
+</div>
+<div>
+<h2 class="text-xl font-black text-slate-900 leading-none">FocusTrack</h2>
+<p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Quiet Productivity</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center space-x-3 px-3 py-2 text-slate-600 hover:bg-slate-50 transition-all duration-150 rounded-md" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="grid_view">grid_view</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-slate-600 hover:bg-slate-50 transition-all duration-150 rounded-md" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="bolt">bolt</span>
+<span class="font-label-md text-label-md">Sprints</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-slate-600 hover:bg-slate-50 transition-all duration-150 rounded-md" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="refresh">refresh</span>
+<span class="font-label-md text-label-md">Cycles</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 bg-slate-100 text-slate-900 font-semibold rounded-md" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="font-label-md text-label-md">Action Items</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 space-y-1">
+<button class="w-full bg-primary text-white py-2 rounded-md font-label-md text-label-md mb-6 hover:opacity-90 transition-opacity">
+                New Goal
+            </button>
+<a class="flex items-center space-x-3 px-3 py-2 text-slate-600 hover:bg-slate-50 transition-all duration-150 rounded-md" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="help">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-slate-600 hover:bg-slate-50 transition-all duration-150 rounded-md" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-md text-label-md">Archive</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 left-64 z-40 bg-white border-b border-slate-200 flex justify-between items-center px-8 py-3 h-16">
+<div class="flex-1 max-w-md">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-1.5 bg-slate-50 border border-transparent focus:border-primary focus:bg-white focus:ring-0 rounded-lg font-label-md text-label-md transition-all" placeholder="Search tasks..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="settings">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-slate-200">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="professional male headshot with neutral background and soft office lighting, corporate style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEjSE1TcxoUjrONH7_t-gZRU1TaE6CzGvn8Xuwc8AG-yW4nFjkLW2bgnXEXOrUFHg3E10KBLlKxckwN0g849hstzJiEssE_mUSHq1GcXUMpZSlI43VeXhCu4dAsQe-fNWEcPOJcrw6uR2pEu-4pEFH3GvVVz8WAdUVSv90ZKIoblOz2OwJ2oSVn_LP4Q-8GWXkQ8yhSdN3IFQKzNPu6eu4KGS9Em7BjIfRD_E-Zcec9cTQbifrYssZIudK1YOfVyowzoMSpE8X1yE"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 mt-16 p-8 min-h-screen">
+<div class="max-w-4xl mx-auto">
+<!-- Page Header -->
+<div class="mb-xxl flex flex-col md:flex-row md:items-end justify-between gap-gutter">
+<div>
+<h1 class="font-h1 text-h1 text-primary mb-xs">Action Items</h1>
+<p class="font-body-md text-body-md text-secondary">Discrete tasks to push your milestones forward.</p>
+</div>
+<div class="flex items-center space-x-1 p-1 bg-slate-100 rounded-lg">
+<button class="px-4 py-1.5 font-label-md text-label-md bg-white text-primary rounded-md shadow-sm">All</button>
+<button class="px-4 py-1.5 font-label-md text-label-md text-secondary hover:text-primary transition-colors">Todo</button>
+<button class="px-4 py-1.5 font-label-md text-label-md text-secondary hover:text-primary transition-colors">Done</button>
+</div>
+</div>
+<!-- Bento Layout Content -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Summary Card -->
+<div class="col-span-12 border border-slate-200 p-lg flex items-center justify-between bg-white">
+<div class="flex gap-xl">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-slate-400 uppercase tracking-wider">Remaining</span>
+<span class="font-h2 text-h2 text-primary">12</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-slate-400 uppercase tracking-wider">Completed</span>
+<span class="font-h2 text-h2 text-primary">48</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-slate-400 uppercase tracking-wider">Velocity</span>
+<span class="font-h2 text-h2 text-primary">8.2<span class="text-label-md text-slate-400 ml-1">/wk</span></span>
+</div>
+</div>
+<div class="hidden md:block w-32 h-2 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[80%]"></div>
+</div>
+</div>
+<!-- Action Items List Container -->
+<div class="col-span-12 lg:col-span-8 space-y-4">
+<!-- Task Item -->
+<div class="group flex items-start space-x-4 p-4 border border-slate-200 bg-white hover:border-slate-300 transition-colors">
+<div class="mt-1">
+<button class="w-6 h-6 border-2 border-slate-300 rounded flex items-center justify-center hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-lg opacity-0" data-icon="check">check</span>
+</button>
+</div>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-primary mb-1">Finalize high-fidelity prototype for user testing</h4>
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-xs text-slate-400" data-icon="ads_click">ads_click</span>
+<span class="font-label-sm text-label-sm text-slate-500">Goal: Design System V2</span>
+</div>
+<div class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-xs text-slate-400" data-icon="flag">flag</span>
+<span class="font-label-sm text-label-sm text-slate-500">Sprint: Q3 Launch</span>
+</div>
+</div>
+</div>
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 bg-slate-50 text-slate-500 text-[10px] font-bold rounded uppercase tracking-tighter border border-slate-200">High</span>
+<button class="text-slate-300 hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-lg" data-icon="more_horiz">more_horiz</span>
+</button>
+</div>
+</div>
+<!-- Task Item (Done) -->
+<div class="group flex items-start space-x-4 p-4 border border-slate-100 bg-slate-50/50">
+<div class="mt-1">
+<div class="w-6 h-6 bg-primary border-2 border-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-lg text-white font-bold" data-icon="check">check</span>
+</div>
+</div>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-slate-400 line-through mb-1">Audit existing component library for accessibility</h4>
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-xs text-slate-300" data-icon="ads_click">ads_click</span>
+<span class="font-label-sm text-label-sm text-slate-400">Goal: Design System V2</span>
+</div>
+<div class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-xs text-slate-300" data-icon="flag">flag</span>
+<span class="font-label-sm text-label-sm text-slate-400">Sprint: Cleanup</span>
+</div>
+</div>
+</div>
+<div class="flex items-center space-x-2">
+<span class="font-label-sm text-label-sm text-slate-400">Jul 12</span>
+</div>
+</div>
+<!-- Task Item -->
+<div class="group flex items-start space-x-4 p-4 border border-slate-200 bg-white hover:border-slate-300 transition-colors">
+<div class="mt-1">
+<button class="w-6 h-6 border-2 border-slate-300 rounded flex items-center justify-center hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-lg opacity-0" data-icon="check">check</span>
+</button>
+</div>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-primary mb-1">Review pull requests for navigation refactor</h4>
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-xs text-slate-400" data-icon="ads_click">ads_click</span>
+<span class="font-label-sm text-label-sm text-slate-500">Goal: Technical Debt</span>
+</div>
+<div class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-xs text-slate-400" data-icon="flag">flag</span>
+<span class="font-label-sm text-label-sm text-slate-500">Milestone: Engine V4</span>
+</div>
+</div>
+</div>
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 bg-slate-50 text-slate-500 text-[10px] font-bold rounded uppercase tracking-tighter border border-slate-200">Medium</span>
+<button class="text-slate-300 hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-lg" data-icon="more_horiz">more_horiz</span>
+</button>
+</div>
+</div>
+<!-- Add Task Area -->
+<div class="border border-dashed border-slate-300 p-4 rounded bg-slate-50/20 flex items-center justify-center group cursor-pointer hover:bg-slate-50 transition-colors">
+<button class="flex items-center space-x-2 text-slate-400 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+<span class="font-label-md text-label-md">Add a quick action item...</span>
+</button>
+</div>
+</div>
+<!-- Right Sidebar Context (Asymmetric Layout) -->
+<div class="col-span-12 lg:col-span-4 space-y-gutter">
+<!-- Context Filter Card -->
+<div class="border border-slate-200 bg-white p-lg">
+<h5 class="font-label-sm text-label-sm text-slate-400 uppercase tracking-widest mb-md">Active Goals</h5>
+<ul class="space-y-3">
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center space-x-3">
+<div class="w-2 h-2 rounded-full bg-blue-500"></div>
+<span class="font-label-md text-label-md text-primary">Design System V2</span>
+</div>
+<span class="text-label-sm text-slate-400">8</span>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center space-x-3">
+<div class="w-2 h-2 rounded-full bg-orange-500"></div>
+<span class="font-label-md text-label-md text-slate-500 group-hover:text-primary transition-colors">Mobile App Refresh</span>
+</div>
+<span class="text-label-sm text-slate-400">14</span>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center space-x-3">
+<div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+<span class="font-label-md text-label-md text-slate-500 group-hover:text-primary transition-colors">Performance Optimization</span>
+</div>
+<span class="text-label-sm text-slate-400">3</span>
+</li>
+</ul>
+<div class="mt-lg pt-lg border-t border-slate-100">
+<a class="font-label-sm text-label-sm text-primary hover:underline" href="#">View all goals</a>
+</div>
+</div>
+<!-- Task Health Bento -->
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 border border-slate-200 bg-white flex flex-col items-center justify-center text-center">
+<span class="material-symbols-outlined text-error mb-2" data-icon="error_outline">error_outline</span>
+<span class="font-h3 text-h3 text-primary">3</span>
+<span class="font-label-sm text-label-sm text-slate-400 uppercase">Overdue</span>
+</div>
+<div class="p-4 border border-slate-200 bg-white flex flex-col items-center justify-center text-center">
+<span class="material-symbols-outlined text-on-secondary-container mb-2" data-icon="event">event</span>
+<span class="font-h3 text-h3 text-primary">5</span>
+<span class="font-label-sm text-label-sm text-slate-400 uppercase">Due Today</span>
+</div>
+</div>
+<!-- Mini Map or Location context placeholder -->
+<div class="border border-slate-200 bg-white overflow-hidden">
+<div class="h-40 relative bg-slate-100">
+<img class="w-full h-full object-cover grayscale opacity-50" data-alt="abstract minimalist architectural detail with clean lines and soft grey shadows, structural minimalism focus" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKUTJcj5dTPSo45k84hN1eGMBNIbKUg3Ql9CiqYKI6f_HiXjOyWCg3npm3EUfWdomNnTD_L76H8ltxtqKyJYjInKCrJDMi2M6eDXrk-TunBZo0pXJt-PW4X_-cWHYkVxYdiKVNNulkxqHNJsCeGW7riXRgzbMZoL4uO4GUvezhgtBtAZpbTTJ1_HjCSiShHL8r1TyN4rDm8EUGrxav62oohnrh0CCCtslVAVE8MhLdWthr-Q2VAwm0YT0m4znvxmpA5dpt3HDpEM0"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="bg-white/80 backdrop-blur-sm p-4 border border-slate-200 text-center">
+<p class="font-label-sm text-label-sm text-slate-500 uppercase tracking-widest mb-1">Focus Zone</p>
+<p class="font-label-md text-label-md text-primary font-bold">HQ Office • Floor 4</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

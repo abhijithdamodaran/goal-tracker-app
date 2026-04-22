@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sprints | FocusTrack</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#ad8a5a",
+                        "on-surface-variant": "#43474d",
+                        "inverse-surface": "#2c3134",
+                        "on-tertiary-fixed-variant": "#5d4119",
+                        "on-surface": "#171c1f",
+                        "inverse-on-surface": "#edf1f5",
+                        "surface-bright": "#f6fafe",
+                        "on-secondary-fixed": "#001d32",
+                        "surface-container-low": "#f0f4f8",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#aec9e7",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#b0c9e8",
+                        "primary-container": "#102a43",
+                        "inverse-primary": "#b0c9e8",
+                        "surface-dim": "#d6dade",
+                        "on-secondary-container": "#48637d",
+                        "on-primary-fixed-variant": "#314863",
+                        "surface-variant": "#dfe3e7",
+                        "surface-container-highest": "#dfe3e7",
+                        "secondary-fixed": "#cee5ff",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f6fafe",
+                        "on-primary-container": "#7a92b0",
+                        "tertiary-fixed": "#ffddb4",
+                        "tertiary-fixed-dim": "#e8c08c",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f6fafe",
+                        "primary": "#00152a",
+                        "on-tertiary-fixed": "#291800",
+                        "on-secondary-fixed-variant": "#2e4962",
+                        "outline-variant": "#c3c6ce",
+                        "surface-tint": "#49607c",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#3b2400",
+                        "on-primary-fixed": "#011d35",
+                        "primary-fixed": "#d1e4ff",
+                        "on-background": "#171c1f",
+                        "outline": "#74777e",
+                        "tertiary": "#201100",
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#e4e9ed",
+                        "secondary-container": "#c4e0fe",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#eaeef2",
+                        "secondary": "#46617b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "0.25rem",
+                        "unit": "8px",
+                        "md": "1rem",
+                        "xl": "2.5rem",
+                        "sm": "0.5rem",
+                        "container-max": "1280px",
+                        "xxl": "4rem",
+                        "gutter": "24px",
+                        "lg": "1.5rem"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "h1": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "h3": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h2": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                        "h1": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.03em", "fontWeight": "600"}],
+                        "h3": ["24px", {"lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                        "h2": ["30px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #f6fafe;
+            color: #171c1f;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md bg-surface">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-64 z-50 bg-white border-r border-slate-200 flex flex-col p-6 space-y-2">
+<div class="mb-6">
+<h2 class="text-xl font-black text-slate-900 mb-1">FocusTrack</h2>
+<p class="text-label-sm text-slate-500 font-label-sm">Quiet Productivity</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-slate-50 transition-all duration-150 rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-slate-100 text-slate-900 font-semibold rounded-md transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+<span class="font-label-md text-label-md">Sprints</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-slate-50 transition-all duration-150 rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="refresh">refresh</span>
+<span class="font-label-md text-label-md">Cycles</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-slate-50 transition-all duration-150 rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="font-label-md text-label-md">Action Items</span>
+</a>
+</nav>
+<button class="w-full bg-primary text-white py-2.5 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 mb-8 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+            New Goal
+        </button>
+<div class="pt-4 border-t border-slate-100 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-slate-50 transition-all duration-150 rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-slate-50 transition-all duration-150 rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-md text-label-md">Archive</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 left-0 z-40 bg-white border-b border-slate-200 flex justify-between items-center w-full px-8 py-3 ml-64">
+<div class="flex items-center bg-surface-container-low px-4 py-1.5 rounded-lg border border-slate-100 w-96">
+<span class="material-symbols-outlined text-slate-400 mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-label-md w-full placeholder:text-slate-400 p-0" placeholder="Search sprints or goals..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-slate-200">
+<img alt="User Avatar" class="h-full w-full object-cover" data-alt="Close-up portrait of a professional man in a minimalist office setting, natural lighting, sharp focus on facial features" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqb9tATtm0kVv4e29PqTPMpy9Nnln1sEYyjE9DDJJ3ekpQOVpMAD5BP25eqg5eX8fO65xN7M40693zA1CcFlcpJCf9bG1jog2pmY5b1-svj4zKbc0O7lJ1p9yldez2UWzv8XLufgOyBUnA1xVGlkaSAzKyFA2-GbcHv0fa_aB-PuxF3ULZP_ze5bnN3ZKaU_WV6J1OYe-PR2EKkfrdRn-jaga7rueyTyj-a0S42NwFOh6BlOWjtWs7H53ZUy9rhOfBvggIyoqfcdM"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 px-8 pb-12 max-w-[1400px]">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-12">
+<div>
+<nav class="flex items-center gap-2 text-label-sm text-slate-400 mb-2 uppercase tracking-widest font-label-sm">
+<span>Performance</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-slate-900">Sprints</span>
+</nav>
+<h1 class="font-h1 text-h1 text-slate-900">Active Sprints</h1>
+</div>
+<button class="bg-primary text-on-primary px-6 py-3 rounded-xl font-label-md text-label-md flex items-center gap-2 shadow-sm hover:opacity-90 transition-all">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+                Start New Sprint
+            </button>
+</div>
+<!-- Bento Layout Sprints -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Sprint Card: Current (Featured) -->
+<div class="col-span-12 lg:col-span-8 bg-white border border-slate-200 rounded-xl overflow-hidden flex flex-col">
+<div class="p-lg border-b border-slate-100 flex justify-between items-start">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 bg-primary-container text-on-primary-container text-[10px] font-bold uppercase tracking-tighter rounded">Current</span>
+<span class="text-label-sm text-slate-400 font-label-sm">May 15 – May 21</span>
+</div>
+<h3 class="font-h3 text-h3 text-slate-900">Sprint 24: Core Foundation</h3>
+</div>
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-[10px] font-bold">JD</div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-[10px] font-bold">ML</div>
+</div>
+</div>
+<div class="p-lg flex-1">
+<div class="mb-6 flex items-center justify-between">
+<span class="text-label-md font-label-md text-slate-900">Action Items (8)</span>
+<div class="w-48 bg-surface-container-low h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[65%]"></div>
+</div>
+</div>
+<div class="space-y-4">
+<!-- Action Item -->
+<div class="group flex items-center justify-between p-4 bg-white border border-slate-100 rounded-lg hover:border-slate-300 transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-6 h-6 border-2 border-primary rounded flex items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-slate-900">Refactor database schema for scalability</p>
+<span class="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Infrastructure 2.0</span>
+</div>
+</div>
+<span class="px-3 py-1 bg-surface-container-low text-slate-500 text-[11px] font-bold rounded-full">Done</span>
+</div>
+<!-- Action Item -->
+<div class="group flex items-center justify-between p-4 bg-white border border-slate-100 rounded-lg hover:border-slate-300 transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-6 h-6 border-2 border-slate-300 rounded cursor-pointer"></div>
+<div>
+<p class="font-label-md text-label-md text-slate-900">Draft quarterly revenue report</p>
+<span class="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Growth Strategy</span>
+</div>
+</div>
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[11px] font-bold rounded-full">In Progress</span>
+</div>
+<!-- Action Item -->
+<div class="group flex items-center justify-between p-4 bg-white border border-slate-100 rounded-lg hover:border-slate-300 transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-6 h-6 border-2 border-slate-300 rounded cursor-pointer"></div>
+<div>
+<p class="font-label-md text-label-md text-slate-900">User interview synthesis (Phase 1)</p>
+<span class="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Product Market Fit</span>
+</div>
+</div>
+<span class="px-3 py-1 bg-surface-container-low text-slate-500 text-[11px] font-bold rounded-full">Pending</span>
+</div>
+</div>
+</div>
+<div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-center">
+<button class="text-slate-500 text-label-sm font-label-sm flex items-center gap-1 hover:text-primary transition-colors">
+                        View all 8 items <span class="material-symbols-outlined text-[14px]" data-icon="arrow_downward">arrow_downward</span>
+</button>
+</div>
+</div>
+<!-- Stats Card -->
+<div class="col-span-12 lg:col-span-4 space-y-gutter">
+<div class="bg-white border border-slate-200 rounded-xl p-lg">
+<h4 class="text-label-sm font-label-sm text-slate-400 uppercase tracking-widest mb-6">Velocity Score</h4>
+<div class="relative h-32 flex items-center justify-center">
+<svg class="w-32 h-32 transform -rotate-90">
+<circle class="text-slate-100" cx="64" cy="64" fill="transparent" r="56" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary" cx="64" cy="64" fill="transparent" r="56" stroke="currentColor" stroke-dasharray="351.8" stroke-dashoffset="88" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-h2 text-h2 text-slate-900">75%</span>
+<span class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">+12% vs last week</span>
+</div>
+</div>
+</div>
+<div class="bg-primary text-white rounded-xl p-lg flex flex-col justify-between h-[200px]">
+<div>
+<span class="material-symbols-outlined text-on-primary-container opacity-50 mb-4" data-icon="tips_and_updates">tips_and_updates</span>
+<p class="font-body-md text-body-md leading-snug">Focus on "Infrastructure 2.0" to clear 40% of your remaining sprint load.</p>
+</div>
+<button class="text-label-sm font-label-sm text-white/70 hover:text-white flex items-center gap-2">
+                        View Insights <span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Previous Sprints List -->
+<div class="col-span-12">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-h3 text-h3 text-slate-900">Past Sprints</h3>
+<div class="flex gap-2">
+<button class="p-2 border border-slate-200 rounded-lg hover:bg-white transition-colors">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+<button class="p-2 border border-slate-200 rounded-lg hover:bg-white transition-colors">
+<span class="material-symbols-outlined" data-icon="sort">sort</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter">
+<!-- Sprint Card -->
+<div class="bg-white border border-slate-200 rounded-xl p-lg hover:shadow-sm transition-all">
+<div class="flex justify-between items-start mb-4">
+<span class="text-label-sm text-slate-400 font-label-sm">May 08 – May 14</span>
+<span class="px-2 py-0.5 bg-green-50 text-green-700 text-[10px] font-bold uppercase rounded">Completed</span>
+</div>
+<h4 class="font-label-md text-label-md text-slate-900 mb-4">Sprint 23: Market Expansion</h4>
+<div class="flex items-center gap-4 text-label-sm text-slate-500 font-label-sm">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="task_alt">task_alt</span>
+                                12/12
+                            </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span>
+                                7 days
+                            </div>
+</div>
+</div>
+<!-- Sprint Card -->
+<div class="bg-white border border-slate-200 rounded-xl p-lg hover:shadow-sm transition-all opacity-80">
+<div class="flex justify-between items-start mb-4">
+<span class="text-label-sm text-slate-400 font-label-sm">May 01 – May 07</span>
+<span class="px-2 py-0.5 bg-green-50 text-green-700 text-[10px] font-bold uppercase rounded">Completed</span>
+</div>
+<h4 class="font-label-md text-label-md text-slate-900 mb-4">Sprint 22: User Onboarding</h4>
+<div class="flex items-center gap-4 text-label-sm text-slate-500 font-label-sm">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="task_alt">task_alt</span>
+                                8/10
+                            </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span>
+                                7 days
+                            </div>
+</div>
+</div>
+<!-- Sprint Card -->
+<div class="bg-white border border-slate-200 rounded-xl p-lg hover:shadow-sm transition-all opacity-60">
+<div class="flex justify-between items-start mb-4">
+<span class="text-label-sm text-slate-400 font-label-sm">Apr 24 – Apr 30</span>
+<span class="px-2 py-0.5 bg-green-50 text-green-700 text-[10px] font-bold uppercase rounded">Completed</span>
+</div>
+<h4 class="font-label-md text-label-md text-slate-900 mb-4">Sprint 21: Security Audit</h4>
+<div class="flex items-center gap-4 text-label-sm text-slate-500 font-label-sm">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="task_alt">task_alt</span>
+                                15/15
+                            </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span>
+                                7 days
+                            </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Background Aesthetic Element -->
+<div class="fixed -bottom-32 -right-32 w-96 h-96 bg-primary opacity-[0.03] rounded-full blur-3xl pointer-events-none"></div>
+</main>
+</body></html>

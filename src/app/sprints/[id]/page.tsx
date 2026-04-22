@@ -37,11 +37,11 @@ function ActionRow({ item, onToggle, onRemove }: {
   onRemove: (id: string) => void;
 }) {
   return (
-    <li className="flex items-center gap-3 px-5 py-3 group hover:bg-gray-50 transition-colors">
+    <li className="flex items-center gap-3 px-5 py-3 group hover:bg-slate-50 transition-colors">
       <button
         onClick={() => onToggle(item.id, !item.done)}
-        className={`h-5 w-5 shrink-0 rounded-full border-2 flex items-center justify-center transition ${
-          item.done ? "border-green-500 bg-green-500" : "border-gray-300 hover:border-green-400"
+        className={`h-5 w-5 shrink-0 rounded border-2 flex items-center justify-center transition ${
+          item.done ? "border-emerald-500 bg-emerald-500" : "border-[#DCE3E8] hover:border-[#00152a]"
         }`}
       >
         {item.done && (
@@ -51,25 +51,25 @@ function ActionRow({ item, onToggle, onRemove }: {
         )}
       </button>
       <div className="flex-1 min-w-0">
-        <Link href={`/action-items/${item.id}`} className={`text-sm hover:underline ${item.done ? "text-gray-400 line-through" : "text-gray-800 font-medium"}`}>
+        <Link href={`/action-items/${item.id}`} className={`text-sm hover:underline ${item.done ? "text-[#74777e] line-through" : "text-[#171c1f] font-medium"}`}>
           {item.title}
         </Link>
         {item.milestone && (
-          <p className="text-xs text-gray-400 mt-0.5 truncate">
+          <p className="text-[10px] text-[#74777e] mt-0.5 truncate uppercase tracking-wide font-medium">
             <Link href={`/goals/${item.milestone.goal.id}`} className="hover:underline">{item.milestone.goal.title}</Link>
-            {" / "}
+            <span className="mx-1">›</span>
             <Link href={`/milestones/${item.milestone.id}`} className="hover:underline">{item.milestone.title}</Link>
           </p>
         )}
       </div>
       {item.dueDate && (
-        <span className={`text-xs shrink-0 ${new Date(item.dueDate) < new Date() && !item.done ? "text-red-500 font-medium" : "text-gray-400"}`}>
+        <span className={`text-xs shrink-0 ${new Date(item.dueDate) < new Date() && !item.done ? "text-red-500 font-medium" : "text-[#74777e]"}`}>
           {new Date(item.dueDate).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
         </span>
       )}
       <button
         onClick={() => onRemove(item.id)}
-        className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition shrink-0"
+        className="opacity-0 group-hover:opacity-100 text-[#74777e] hover:text-red-500 transition shrink-0"
         title="Remove from sprint"
       >
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -87,13 +87,11 @@ export default function SprintDetailPage() {
   const [sprint, setSprint] = useState<Sprint | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // New item form
   const [showAdd, setShowAdd] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [addError, setAddError] = useState("");
   const [addLoading, setAddLoading] = useState(false);
 
-  // Assign existing panel
   const [showAssign, setShowAssign] = useState(false);
   const [unassigned, setUnassigned] = useState<UnassignedItem[]>([]);
   const [assignLoading, setAssignLoading] = useState(false);
@@ -180,7 +178,11 @@ export default function SprintDetailPage() {
     if (res.ok) setSprint((s) => s ? { ...s, reviewedAt: data.sprint.reviewedAt } : s);
   }
 
-  if (loading) return <div className="flex h-64 items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" /></div>;
+  if (loading) return (
+    <div className="min-h-screen bg-[#f6fafe] flex items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#00152a] border-t-transparent" />
+    </div>
+  );
   if (!sprint) return null;
 
   const now = new Date();
@@ -201,26 +203,24 @@ export default function SprintDetailPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="border-b border-gray-200 bg-white px-4 py-4 shadow-sm">
-        <div className="mx-auto flex max-w-4xl items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/sprints" className="text-sm text-gray-500 hover:text-gray-700">← Sprints</Link>
-            <span className="text-gray-300">/</span>
-            <span className="text-sm text-gray-700 truncate max-w-40">{sprint.name}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            {isCurrent && <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700">Current</span>}
-            {sprint.reviewedAt && <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">Reviewed</span>}
-          </div>
+    <div className="min-h-screen bg-[#f6fafe]">
+      <header className="sticky top-0 z-30 bg-white border-b border-[#DCE3E8] px-6 h-14 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-sm text-[#74777e]">
+          <Link href="/sprints" className="hover:text-[#43474d]">Sprints</Link>
+          <span className="text-[#DCE3E8]">/</span>
+          <span className="text-[#171c1f] font-medium truncate max-w-40">{sprint.name}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          {isCurrent && <span className="rounded-md bg-[#00152a] px-2 py-0.5 text-xs font-medium text-white">Current</span>}
+          {sprint.reviewedAt && <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700">Reviewed</span>}
         </div>
       </header>
 
-      <main className="mx-auto max-w-4xl px-4 py-8 space-y-6">
+      <main className="mx-auto max-w-4xl px-6 py-8 space-y-6">
         {/* Sprint header */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm space-y-3">
-          <h1 className="text-2xl font-bold text-gray-900">{sprint.name}</h1>
-          <p className="text-sm text-gray-500">
+        <div className="rounded-lg border border-[#DCE3E8] bg-white p-6 space-y-3">
+          <h1 className="text-2xl font-semibold text-[#171c1f] tracking-tight">{sprint.name}</h1>
+          <p className="text-sm text-[#74777e]">
             {startDate.toLocaleDateString(undefined, { weekday: "short", month: "long", day: "numeric" })}
             {" — "}
             {endDate.toLocaleDateString(undefined, { weekday: "short", month: "long", day: "numeric", year: "numeric" })}
@@ -228,11 +228,11 @@ export default function SprintDetailPage() {
           {sprint.actionItems.length > 0 && (
             <div className="space-y-1.5 pt-1">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">{done.length} of {sprint.actionItems.length} items complete</span>
-                <span className="font-semibold text-gray-900">{pct}%</span>
+                <span className="text-[#43474d]">{done.length} of {sprint.actionItems.length} items complete</span>
+                <span className="font-semibold text-[#171c1f]">{pct}%</span>
               </div>
-              <div className="h-2 w-full rounded-full bg-gray-100">
-                <div className={`h-2 rounded-full transition-all ${pct === 100 ? "bg-green-500" : "bg-blue-500"}`} style={{ width: `${pct}%` }} />
+              <div className="h-1.5 w-full rounded-full bg-slate-100">
+                <div className={`h-1.5 rounded-full transition-all ${pct === 100 ? "bg-emerald-500" : "bg-[#00152a]"}`} style={{ width: `${pct}%` }} />
               </div>
             </div>
           )}
@@ -240,30 +240,30 @@ export default function SprintDetailPage() {
 
         {/* Sprint review CTA */}
         {isReviewable && (
-          <div className="rounded-2xl border border-yellow-200 bg-yellow-50 p-5 flex items-center justify-between gap-4">
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-5 flex items-center justify-between gap-4">
             <div>
-              <p className="font-semibold text-yellow-800 text-sm">Sprint ended — time to review</p>
-              <p className="text-xs text-yellow-700 mt-0.5">You completed {done.length}/{sprint.actionItems.length} items ({pct}%)</p>
+              <p className="font-semibold text-amber-800 text-sm">Sprint ended — time to review</p>
+              <p className="text-xs text-amber-700 mt-0.5">You completed {done.length}/{sprint.actionItems.length} items ({pct}%)</p>
             </div>
-            <button onClick={markReviewed} className="shrink-0 rounded-xl bg-yellow-500 px-4 py-2 text-sm font-semibold text-white hover:bg-yellow-600">
+            <button onClick={markReviewed} className="shrink-0 rounded-md bg-amber-500 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-600">
               Mark reviewed
             </button>
           </div>
         )}
 
         {isPast && sprint.reviewedAt && (
-          <div className="rounded-2xl border border-green-200 bg-green-50 p-5">
-            <p className="font-semibold text-green-800 text-sm">Sprint review complete</p>
-            <p className="text-xs text-green-700 mt-0.5">
+          <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-5">
+            <p className="font-semibold text-emerald-800 text-sm">Sprint review complete</p>
+            <p className="text-xs text-emerald-700 mt-0.5">
               Completed {done.length}/{sprint.actionItems.length} items ({pct}%) · Reviewed {new Date(sprint.reviewedAt).toLocaleDateString()}
             </p>
           </div>
         )}
 
         {/* Action items board */}
-        <section className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-900">Action items</h2>
+        <section className="rounded-lg border border-[#DCE3E8] bg-white overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-[#DCE3E8]">
+            <h2 className="text-sm font-semibold text-[#171c1f]">Action items</h2>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => {
@@ -273,79 +273,77 @@ export default function SprintDetailPage() {
                   });
                   setShowAdd(false);
                 }}
-                className="text-sm font-medium text-gray-600 hover:text-gray-800"
+                className="text-xs font-medium text-[#43474d] hover:text-[#171c1f]"
               >
-                {showAssign ? "Cancel assign" : "Assign existing"}
+                {showAssign ? "Cancel" : "Assign existing"}
               </button>
               <button
                 onClick={() => { setShowAdd((v) => !v); setShowAssign(false); }}
-                className="text-sm font-semibold text-blue-600 hover:text-blue-700"
+                className="text-xs font-medium text-[#00152a] hover:underline"
               >
                 {showAdd ? "Cancel" : "+ New item"}
               </button>
             </div>
           </div>
 
-          {/* New item form */}
           {showAdd && (
-            <form onSubmit={handleAddItem} className="px-5 py-4 bg-blue-50 border-b border-gray-100 space-y-3">
+            <form onSubmit={handleAddItem} className="px-5 py-4 bg-slate-50 border-b border-[#DCE3E8] space-y-3">
               {addError && <p className="text-xs text-red-600">{addError}</p>}
               <input
                 autoFocus
                 value={newTitle}
                 onChange={(e) => { setNewTitle(e.target.value); if (addError) setAddError(""); }}
                 placeholder="What needs to get done?"
-                className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="block w-full rounded-md border border-[#DCE3E8] px-3 py-2 text-sm focus:border-[#00152a] focus:outline-none focus:ring-1 focus:ring-[#00152a]"
               />
               <div className="flex gap-2">
-                <button type="submit" disabled={addLoading} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60">
+                <button type="submit" disabled={addLoading} className="rounded-md bg-[#00152a] px-4 py-2 text-xs font-semibold text-white hover:bg-[#102a43] disabled:opacity-60">
                   {addLoading ? "Adding…" : "Add"}
                 </button>
-                <button type="button" onClick={() => { setShowAdd(false); setAddError(""); }} className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                <button type="button" onClick={() => { setShowAdd(false); setAddError(""); }} className="rounded-md border border-[#DCE3E8] px-4 py-2 text-xs text-[#43474d] hover:bg-slate-50">
                   Cancel
                 </button>
               </div>
             </form>
           )}
 
-          {/* Assign existing panel */}
           {showAssign && (
-            <div className="border-b border-gray-100 bg-gray-50">
+            <div className="border-b border-[#DCE3E8] bg-slate-50">
               <div className="px-5 pt-4 pb-3 space-y-2">
-                <p className="text-xs font-medium text-gray-500">Select items to add to this sprint</p>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[#74777e]">Select items to add to this sprint</p>
                 <input
                   autoFocus
                   value={assignSearch}
                   onChange={(e) => setAssignSearch(e.target.value)}
                   placeholder="Search items…"
-                  className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="block w-full rounded-md border border-[#DCE3E8] px-3 py-2 text-sm focus:border-[#00152a] focus:outline-none focus:ring-1 focus:ring-[#00152a]"
                 />
               </div>
               {assignLoading ? (
-                <div className="px-5 py-4 text-xs text-gray-400">Loading…</div>
+                <div className="px-5 py-4 text-xs text-[#74777e]">Loading…</div>
               ) : filteredUnassigned.length === 0 ? (
-                <div className="px-5 py-4 text-xs text-gray-400">
+                <div className="px-5 py-4 text-xs text-[#74777e]">
                   {unassigned.length === 0 ? "All action items are already in this sprint." : "No items match your search."}
                 </div>
               ) : (
-                <ul className="divide-y divide-gray-100 max-h-64 overflow-y-auto">
+                <ul className="divide-y divide-[#DCE3E8] max-h-64 overflow-y-auto">
                   {filteredUnassigned.map((item) => (
                     <li key={item.id} className="flex items-center gap-3 px-5 py-3 hover:bg-white transition-colors">
                       <div className="flex-1 min-w-0">
-                        <p className={`text-sm font-medium ${item.done ? "text-gray-400 line-through" : "text-gray-800"}`}>{item.title}</p>
+                        <p className={`text-sm font-medium ${item.done ? "text-[#74777e] line-through" : "text-[#171c1f]"}`}>{item.title}</p>
                         {item.milestone && (
-                          <p className="text-xs text-gray-400 mt-0.5 truncate">
+                          <p className="text-[10px] text-[#74777e] mt-0.5 truncate uppercase tracking-wide">
                             {item.milestone.goal.title} / {item.milestone.title}
                           </p>
                         )}
                         {item.sprint && (
-                          <p className="text-xs text-orange-500 mt-0.5">Currently in: {item.sprint.name}</p>
+                          <p className="text-[10px] text-amber-600 mt-0.5">Currently in: {item.sprint.name}</p>
                         )}
                       </div>
                       <button
                         onClick={() => assignExisting(item)}
                         disabled={assigning === item.id}
-                        className="shrink-0 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
+                        className="shrink-0 rounded-md bg-[#00152a] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#102a43] disabled:opacity-60"
                       >
                         {assigning === item.id ? "…" : "Add"}
                       </button>
@@ -358,27 +356,27 @@ export default function SprintDetailPage() {
 
           {sprint.actionItems.length === 0 ? (
             <div className="px-5 py-8 text-center">
-              <p className="text-sm text-gray-500">No action items yet.</p>
-              <p className="text-xs text-gray-400 mt-1">Add a new item or assign existing ones from your milestones.</p>
+              <p className="text-sm text-[#74777e]">No action items yet.</p>
+              <p className="text-xs text-[#74777e] mt-1">Add a new item or assign existing ones from your milestones.</p>
             </div>
           ) : (
             <div>
               {todo.length > 0 && (
                 <div>
-                  <div className="px-5 py-2 bg-gray-50 border-b border-gray-100">
-                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">To do ({todo.length})</span>
+                  <div className="px-5 py-2 bg-slate-50 border-b border-[#DCE3E8]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#74777e]">To do ({todo.length})</span>
                   </div>
-                  <ul className="divide-y divide-gray-100">
+                  <ul className="divide-y divide-[#DCE3E8]">
                     {todo.map((item) => <ActionRow key={item.id} item={item} onToggle={toggleDone} onRemove={removeFromSprint} />)}
                   </ul>
                 </div>
               )}
               {done.length > 0 && (
                 <div>
-                  <div className="px-5 py-2 bg-gray-50 border-b border-gray-100">
-                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Done ({done.length})</span>
+                  <div className="px-5 py-2 bg-slate-50 border-b border-[#DCE3E8]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#74777e]">Done ({done.length})</span>
                   </div>
-                  <ul className="divide-y divide-gray-100">
+                  <ul className="divide-y divide-[#DCE3E8]">
                     {done.map((item) => <ActionRow key={item.id} item={item} onToggle={toggleDone} onRemove={removeFromSprint} />)}
                   </ul>
                 </div>

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
+import { CalendarDays, LayoutDashboard, Target } from "lucide-react";
 
 const TIMEZONES = [
   "UTC",
@@ -36,9 +37,9 @@ const TIMEZONES = [
 ];
 
 const HOME_SCREEN_OPTIONS = [
-  { value: "today", label: "Today", description: "Daily habits + current sprint items" },
-  { value: "sprint", label: "Sprint Board", description: "Current weekly sprint in full" },
-  { value: "dashboard", label: "Goal Dashboard", description: "Goals, milestones, and progress" },
+  { value: "today", label: "Today", description: "Daily focus and immediate tasks.", Icon: CalendarDays },
+  { value: "sprint", label: "Sprint Board", description: "Kanban view of active weekly sprint.", Icon: LayoutDashboard },
+  { value: "dashboard", label: "Goal Dashboard", description: "High-level metrics and goal progress.", Icon: Target },
 ];
 
 export default function SettingsPage() {
@@ -81,7 +82,6 @@ export default function SettingsPage() {
       });
       const data = await res.json();
       if (!res.ok) { setError(data.error ?? "Failed to save."); return; }
-      // Refresh the JWT session so homeScreen is up to date
       await updateSession();
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
@@ -91,146 +91,169 @@ export default function SettingsPage() {
   }
 
   const displayName = session?.user?.name ?? session?.user?.email ?? "there";
+  const initial = displayName.charAt(0).toUpperCase();
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="mx-auto max-w-2xl px-4 py-8 space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-          <p className="text-sm text-gray-500 mt-1">Manage your account and preferences</p>
-        </div>
+    <div className="min-h-screen bg-[#f6fafe]">
+      {/* Header */}
+      <header className="sticky top-0 z-30 bg-white border-b border-[#DCE3E8] px-6 h-14 flex items-center">
+        <h1 className="text-sm font-semibold text-[#171c1f]">Settings</h1>
+      </header>
 
-        <form onSubmit={handleSave} className="space-y-5">
-          {error && (
-            <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>
-          )}
+      <main className="px-6 py-8 max-w-2xl mx-auto space-y-10">
+        {error && (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>
+        )}
 
-          {/* Profile */}
-          <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm space-y-4">
-            <h2 className="font-semibold text-gray-900">Profile</h2>
+        {/* User Profile */}
+        <section>
+          <h2 className="text-lg font-semibold text-[#171c1f] mb-1">User Profile</h2>
+          <p className="text-sm text-[#43474d] mb-6">Manage your identity and display preferences.</p>
 
-            <div className="flex items-center gap-4">
-              {session?.user?.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={session.user.image} alt={displayName} className="h-14 w-14 rounded-full object-cover" />
-              ) : (
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 text-lg font-bold text-blue-700">
-                  {displayName.charAt(0).toUpperCase()}
+          <div className="bg-white border border-[#DCE3E8] rounded-lg p-5 mb-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                {session?.user?.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={session.user.image} alt={displayName} className="h-12 w-12 rounded-full border border-[#DCE3E8] object-cover" />
+                ) : (
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-200 text-base font-bold text-[#171c1f]">
+                    {initial}
+                  </div>
+                )}
+                <div>
+                  <p className="font-semibold text-[#171c1f] text-sm">{displayName}</p>
+                  <p className="text-xs text-[#74777e]">{session?.user?.email}</p>
                 </div>
-              )}
-              <div>
-                <p className="font-medium text-gray-900">{displayName}</p>
-                <p className="text-sm text-gray-500">{session?.user?.email}</p>
               </div>
             </div>
+          </div>
 
+          <form onSubmit={handleSave} className="space-y-8">
+            {/* Display name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Display name</label>
+              <label className="block text-sm font-medium text-[#171c1f] mb-1.5">Display name</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name"
                 maxLength={100}
-                className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="block w-full rounded-md border border-[#DCE3E8] px-3 py-2.5 text-sm text-[#171c1f] bg-white focus:border-[#00152a] focus:outline-none focus:ring-1 focus:ring-[#00152a]"
               />
             </div>
 
+            {/* Timezone */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Timezone</label>
+              <label className="block text-sm font-medium text-[#171c1f] mb-1.5">Timezone</label>
               <select
                 value={timezone}
                 onChange={(e) => setTimezone(e.target.value)}
-                className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
+                className="block w-full rounded-md border border-[#DCE3E8] px-3 py-2.5 text-sm text-[#171c1f] bg-white focus:border-[#00152a] focus:outline-none focus:ring-1 focus:ring-[#00152a]"
               >
                 {TIMEZONES.map((tz) => (
                   <option key={tz} value={tz}>{tz.replace(/_/g, " ")}</option>
                 ))}
               </select>
             </div>
-          </section>
 
-          {/* Home screen */}
-          <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm space-y-4">
+            {/* Default Home Screen */}
             <div>
-              <h2 className="font-semibold text-gray-900">Home screen</h2>
-              <p className="text-sm text-gray-500 mt-0.5">Which view opens when you launch the app</p>
-            </div>
-            <div className="space-y-2">
-              {HOME_SCREEN_OPTIONS.map((opt) => (
-                <label
-                  key={opt.value}
-                  className={`flex items-center gap-3 rounded-xl border-2 p-4 cursor-pointer transition-colors ${
-                    homeScreen === opt.value
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300"
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="homeScreen"
-                    value={opt.value}
-                    checked={homeScreen === opt.value}
-                    onChange={(e) => setHomeScreen(e.target.value)}
-                    className="accent-blue-600"
-                  />
-                  <div>
-                    <p className={`font-medium text-sm ${homeScreen === opt.value ? "text-blue-900" : "text-gray-900"}`}>
-                      {opt.label}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-0.5">{opt.description}</p>
-                  </div>
-                </label>
-              ))}
-            </div>
-          </section>
-
-          {/* Notifications (stub) */}
-          <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm space-y-4 opacity-60">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="font-semibold text-gray-900">Notifications</h2>
-                <p className="text-sm text-gray-500 mt-0.5">Push notifications — coming in a future update</p>
+              <h3 className="text-base font-semibold text-[#171c1f] mb-1">Default Home Screen</h3>
+              <p className="text-sm text-[#43474d] mb-4">Choose which view opens when you launch GoalTracker.</p>
+              <div className="grid grid-cols-3 gap-3">
+                {HOME_SCREEN_OPTIONS.map(({ value, label, description, Icon }) => (
+                  <label
+                    key={value}
+                    className={`flex flex-col gap-2 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+                      homeScreen === value
+                        ? "border-[#00152a] bg-white"
+                        : "border-[#DCE3E8] bg-white hover:border-slate-300"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="homeScreen"
+                      value={value}
+                      checked={homeScreen === value}
+                      onChange={(e) => setHomeScreen(e.target.value)}
+                      className="sr-only"
+                    />
+                    <Icon className={`h-5 w-5 ${homeScreen === value ? "text-[#00152a]" : "text-slate-400"}`} />
+                    <div>
+                      <p className={`text-sm font-semibold ${homeScreen === value ? "text-[#00152a]" : "text-[#171c1f]"}`}>{label}</p>
+                      <p className="text-[11px] text-[#74777e] mt-0.5 leading-snug">{description}</p>
+                    </div>
+                  </label>
+                ))}
               </div>
-              <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-500">Soon</span>
             </div>
-            <div className="space-y-3">
-              {["Daily habit reminder", "Sprint start / end alerts", "Milestone deadline approaching"].map((label) => (
-                <div key={label} className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">{label}</span>
-                  <div className="h-5 w-9 rounded-full bg-gray-200 cursor-not-allowed" />
-                </div>
-              ))}
-            </div>
-          </section>
 
-          {/* Save */}
-          <div className="flex items-center justify-between">
-            <button
-              type="submit"
-              disabled={saving}
-              className="rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60 transition-colors"
-            >
-              {saving ? "Saving…" : saved ? "✓ Saved" : "Save changes"}
-            </button>
-          </div>
-        </form>
+            {/* Notifications (stub) */}
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-base font-semibold text-[#171c1f]">Notifications</h3>
+                  <p className="text-sm text-[#43474d] mt-0.5">Push notifications — coming in a future update.</p>
+                </div>
+                <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#74777e]">Soon</span>
+              </div>
+              <div className="space-y-4 opacity-60 pointer-events-none">
+                {[
+                  { label: "System Alerts", desc: "Important updates about your account and security." },
+                  { label: "Sprint Reminders", desc: "Daily nudges to update your sprint progress." },
+                  { label: "Weekly Summary", desc: "A detailed email report of your weekly productivity." },
+                ].map(({ label, desc }) => (
+                  <div key={label} className="flex items-center justify-between py-3 border-b border-[#DCE3E8] last:border-0">
+                    <div>
+                      <p className="text-sm font-medium text-[#171c1f]">{label}</p>
+                      <p className="text-xs text-[#74777e] mt-0.5">{desc}</p>
+                    </div>
+                    <div className="h-6 w-11 rounded-full bg-slate-200 cursor-not-allowed shrink-0" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Save / Discard */}
+            <div className="flex items-center justify-end gap-3 pt-2 border-t border-[#DCE3E8]">
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="rounded-md border border-[#DCE3E8] px-5 py-2 text-sm font-medium text-[#43474d] hover:bg-slate-50 transition-colors"
+              >
+                Discard Changes
+              </button>
+              <button
+                type="submit"
+                disabled={saving}
+                className="rounded-md bg-[#00152a] px-5 py-2 text-sm font-semibold text-white hover:bg-[#102a43] disabled:opacity-60 transition-colors"
+              >
+                {saving ? "Saving…" : saved ? "✓ Saved" : "Save Preferences"}
+              </button>
+            </div>
+          </form>
+        </section>
 
         {/* Family workspace */}
-        <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="font-semibold text-gray-900">Family workspace</h2>
+        <section>
+          <div className="flex items-center justify-between mb-1">
+            <h2 className="text-lg font-semibold text-[#171c1f]">Family Workspace</h2>
             {family && (
-              <Link href="/family/settings" className="text-sm font-medium text-blue-600 hover:text-blue-700">
+              <Link href="/family/settings" className="text-sm font-medium text-[#00152a] hover:underline">
                 Manage →
               </Link>
             )}
           </div>
+          <p className="text-sm text-[#43474d] mb-6">
+            {family ? "Your shared workspace for goals and habits." : "Create or join a family workspace to share goals with your partner."}
+          </p>
+
           {family ? (
-            <div className="space-y-3">
+            <div className="bg-white border border-[#DCE3E8] rounded-lg p-5 space-y-4">
               <div className="flex items-center justify-between">
-                <p className="font-medium text-gray-800">{family.name}</p>
-                <span className="rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-700 capitalize">{family.role}</span>
+                <p className="font-semibold text-[#171c1f] text-sm">{family.name}</p>
+                <span className="rounded-full bg-purple-50 px-2.5 py-0.5 text-xs font-semibold text-purple-700 capitalize">{family.role}</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex -space-x-1.5">
@@ -239,40 +262,48 @@ export default function SettingsPage() {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img key={m.id} src={m.image} alt={m.name ?? ""} className="h-7 w-7 rounded-full border-2 border-white object-cover" />
                     ) : (
-                      <div key={m.id} className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-blue-100 text-xs font-semibold text-blue-700">
+                      <div key={m.id} className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-slate-200 text-[10px] font-bold text-[#171c1f]">
                         {(m.name ?? m.email ?? "?").charAt(0).toUpperCase()}
                       </div>
                     )
                   ))}
                 </div>
-                <span className="text-sm text-gray-500">{family.members.length} member{family.members.length !== 1 ? "s" : ""}</span>
+                <span className="text-xs text-[#74777e]">{family.members.length} member{family.members.length !== 1 ? "s" : ""}</span>
               </div>
             </div>
           ) : (
-            <div className="space-y-2">
-              <p className="text-sm text-gray-500">You haven&apos;t joined a family workspace yet.</p>
+            <div className="bg-white border border-[#DCE3E8] rounded-lg p-5">
+              <p className="text-sm text-[#43474d] mb-4">You haven&apos;t joined a family workspace yet.</p>
               <div className="flex gap-3">
-                <Link href="/family/create" className="text-sm font-medium text-blue-600 hover:text-blue-700">Create workspace →</Link>
-                <Link href="/family/join" className="text-sm font-medium text-gray-500 hover:text-gray-700">Join with code →</Link>
+                <Link href="/family/create" className="inline-flex items-center rounded-md bg-[#00152a] px-4 py-2 text-xs font-semibold text-white hover:bg-[#102a43] transition-colors">
+                  Create workspace
+                </Link>
+                <Link href="/family/join" className="inline-flex items-center rounded-md border border-[#DCE3E8] px-4 py-2 text-xs font-medium text-[#43474d] hover:bg-slate-50 transition-colors">
+                  Join with code
+                </Link>
               </div>
             </div>
           )}
         </section>
 
-        {/* Sign out */}
-        <section className="rounded-2xl border border-red-200 bg-white p-5 shadow-sm">
-          <h2 className="font-semibold text-red-700 text-sm mb-3">Account</h2>
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-700">Sign out of GoalTracker</p>
+        {/* Account / Sign out */}
+        <section>
+          <h2 className="text-lg font-semibold text-red-700 mb-1">Account</h2>
+          <p className="text-sm text-[#43474d] mb-6">Manage your session.</p>
+          <div className="bg-white border border-red-100 rounded-lg p-5 flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-[#171c1f]">Sign out of GoalTracker</p>
+              <p className="text-xs text-[#74777e] mt-0.5">You will be redirected to the sign-in page.</p>
+            </div>
             <button
               onClick={() => signOut({ callbackUrl: "/signin" })}
-              className="text-sm font-medium text-red-600 hover:text-red-700"
+              className="text-sm font-semibold text-red-600 hover:text-red-700 transition-colors"
             >
               Sign out
             </button>
           </div>
         </section>
-      </div>
+      </main>
     </div>
   );
 }

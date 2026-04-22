@@ -5,14 +5,11 @@ import Link from "next/link";
 
 const STREAK_MODE_LABELS: Record<string, string> = {
   strict: "Strict",
-  "one-grace-per-week": "1 grace/week",
+  "one-grace-per-week": "1 grace/wk",
   "percentage-threshold": "% threshold",
 };
 
-function StreakBadge({ count }: { count: number }) {
-  const color = count >= 7 ? "bg-orange-100 text-orange-700" : count >= 3 ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-500";
-  return <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${color}`}>🔥 {count}</span>;
-}
+const DAY_ABBR = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
 export default async function HabitsPage() {
   const session = await auth();
@@ -24,8 +21,6 @@ export default async function HabitsPage() {
   });
 
   const today = new Date().toISOString().slice(0, 10);
-
-  // Load today's check-ins for all habits
   const todayCheckIns = await prisma.habitCheckIn.findMany({
     where: {
       habitId: { in: habits.map((h) => h.id) },
@@ -42,80 +37,140 @@ export default async function HabitsPage() {
     } catch { return true; }
   });
 
+  const habitsDoneToday = scheduledToday.filter((h) => checkedInToday.has(h.id)).length;
+  const totalStreak = habits.reduce((sum, h) => sum + h.streakCount, 0);
+  const longestStreak = habits.length > 0 ? Math.max(...habits.map((h) => h.streakCount)) : 0;
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="border-b border-gray-200 bg-white px-4 py-4 shadow-sm">
-        <div className="mx-auto flex max-w-4xl items-center justify-between">
-          <h1 className="text-base font-semibold text-gray-900">Habits</h1>
-          <Link href="/habits/new" className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">
-            + New habit
-          </Link>
-        </div>
+    <div className="min-h-screen bg-[#f6fafe]">
+      {/* Header */}
+      <header className="sticky top-0 z-30 bg-white border-b border-[#DCE3E8] px-6 h-14 flex items-center justify-between">
+        <h1 className="text-sm font-semibold text-[#171c1f]">Habits</h1>
+        <Link href="/habits/new" className="inline-flex items-center gap-1.5 bg-[#00152a] text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-[#102a43] transition-colors">
+          + New habit
+        </Link>
       </header>
 
-      <main className="mx-auto max-w-4xl px-4 py-8 space-y-8">
+      <main className="px-6 py-8 max-w-4xl mx-auto space-y-8">
+        {/* Page title */}
+        <div>
+          <h2 className="text-2xl font-semibold text-[#171c1f] tracking-tight">Habits</h2>
+          <p className="text-sm text-[#43474d] mt-1">Build recurring routines and track your momentum.</p>
+        </div>
+
+        {/* Empty state */}
         {habits.length === 0 && (
-          <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-12 text-center space-y-3">
-            <p className="text-gray-500">No habits yet.</p>
-            <p className="text-sm text-gray-400">Build recurring habits and track streaks to reach your goals.</p>
-            <Link href="/habits/new" className="inline-block mt-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700">
+          <div className="border border-dashed border-[#DCE3E8] bg-white rounded-lg py-16 text-center space-y-3">
+            <p className="text-sm text-[#74777e]">No habits yet.</p>
+            <p className="text-xs text-[#74777e]">Build recurring habits and track streaks to reach your goals.</p>
+            <Link href="/habits/new" className="inline-flex items-center gap-1.5 mt-2 bg-[#00152a] text-white text-xs font-medium px-4 py-2 rounded-md hover:bg-[#102a43] transition-colors">
               Create your first habit
             </Link>
           </div>
         )}
 
+        {/* Stats bar */}
+        {habits.length > 0 && (
+          <div className="bg-white border border-[#DCE3E8] rounded-lg px-6 py-4 flex items-center gap-10">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#74777e]">Today</p>
+              <p className="text-2xl font-semibold text-[#171c1f] tracking-tight leading-tight mt-0.5">
+                {habitsDoneToday}/{scheduledToday.length}
+              </p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#74777e]">Active Habits</p>
+              <p className="text-2xl font-semibold text-[#171c1f] tracking-tight leading-tight mt-0.5">{habits.length}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#74777e]">Longest Streak</p>
+              <p className="text-2xl font-semibold text-[#171c1f] tracking-tight leading-tight mt-0.5">
+                {longestStreak > 0 ? `🔥 ${longestStreak}` : "—"}
+              </p>
+            </div>
+            <div className="hidden sm:block">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#74777e]">Total Streak Pts</p>
+              <p className="text-2xl font-semibold text-[#171c1f] tracking-tight leading-tight mt-0.5">{totalStreak}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Today's scheduled habits */}
         {scheduledToday.length > 0 && (
           <section className="space-y-3">
-            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Today</h2>
-            <ul className="divide-y divide-gray-100 rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-              {scheduledToday.map((habit) => {
-                const done = checkedInToday.has(habit.id);
-                return (
-                  <li key={habit.id} className="flex items-center gap-4 px-5 py-4">
-                    <div className={`h-6 w-6 shrink-0 rounded-full border-2 flex items-center justify-center ${done ? "border-green-500 bg-green-500" : "border-gray-300"}`}>
-                      {done && <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <Link href={`/habits/${habit.id}`} className="text-sm font-medium text-gray-900 hover:underline truncate block">{habit.title}</Link>
-                      {habit.description && <p className="text-xs text-gray-400 truncate">{habit.description}</p>}
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <StreakBadge count={habit.streakCount} />
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
+            <h2 className="text-[10px] font-bold uppercase tracking-wider text-[#74777e]">Scheduled Today</h2>
+            <div className="bg-white border border-[#DCE3E8] rounded-lg overflow-hidden">
+              <ul className="divide-y divide-[#DCE3E8]">
+                {scheduledToday.map((habit) => {
+                  const done = checkedInToday.has(habit.id);
+                  const streakColor = habit.streakCount >= 7 ? "text-orange-600" : habit.streakCount >= 3 ? "text-[#00152a]" : "text-[#74777e]";
+                  return (
+                    <li key={habit.id} className="flex items-center gap-4 px-5 py-4">
+                      <div className={`h-6 w-6 shrink-0 rounded border-2 flex items-center justify-center ${done ? "border-emerald-500 bg-emerald-500" : "border-[#DCE3E8]"}`}>
+                        {done && (
+                          <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                          </svg>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <Link href={`/habits/${habit.id}`} className={`text-sm font-medium hover:underline truncate block ${done ? "text-[#74777e] line-through" : "text-[#171c1f]"}`}>
+                          {habit.title}
+                        </Link>
+                        {habit.description && (
+                          <p className="text-xs text-[#74777e] truncate mt-0.5">{habit.description}</p>
+                        )}
+                      </div>
+                      <span className={`text-xs font-semibold shrink-0 ${streakColor}`}>🔥 {habit.streakCount}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </section>
         )}
 
+        {/* All habits */}
         {habits.length > 0 && (
           <section className="space-y-3">
-            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">All habits</h2>
-            <ul className="divide-y divide-gray-100 rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-              {habits.map((habit) => {
-                const days: number[] = (() => { try { return JSON.parse(habit.scheduledDays); } catch { return [0,1,2,3,4,5,6]; } })();
-                const DAY_ABBR = ["Su","Mo","Tu","We","Th","Fr","Sa"];
-                return (
-                  <li key={habit.id}>
-                    <Link href={`/habits/${habit.id}`} className="flex items-center gap-4 px-5 py-4 hover:bg-gray-50 transition-colors">
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">{habit.title}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-xs text-gray-400">{days.map(d => DAY_ABBR[d]).join(" · ")}</span>
-                          <span className="text-xs text-gray-300">·</span>
-                          <span className="text-xs text-gray-400">{STREAK_MODE_LABELS[habit.streakMode] ?? habit.streakMode}</span>
+            <h2 className="text-[10px] font-bold uppercase tracking-wider text-[#74777e]">All Habits</h2>
+            <div className="bg-white border border-[#DCE3E8] rounded-lg overflow-hidden">
+              <ul className="divide-y divide-[#DCE3E8]">
+                {habits.map((habit) => {
+                  const days: number[] = (() => { try { return JSON.parse(habit.scheduledDays); } catch { return [0,1,2,3,4,5,6]; } })();
+                  const streakColor = habit.streakCount >= 7 ? "text-orange-600" : habit.streakCount >= 3 ? "text-[#00152a]" : "text-[#74777e]";
+                  return (
+                    <li key={habit.id}>
+                      <Link href={`/habits/${habit.id}`} className="flex items-center gap-4 px-5 py-4 hover:bg-slate-50 transition-colors">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-[#171c1f] truncate">{habit.title}</p>
+                          <div className="flex items-center gap-3 mt-1.5">
+                            {/* Day dots */}
+                            <div className="flex gap-1">
+                              {[0,1,2,3,4,5,6].map((d) => (
+                                <span
+                                  key={d}
+                                  className={`text-[9px] font-bold ${days.includes(d) ? "text-[#171c1f]" : "text-slate-300"}`}
+                                >
+                                  {DAY_ABBR[d]}
+                                </span>
+                              ))}
+                            </div>
+                            <span className="text-[10px] text-[#74777e] font-medium">{STREAK_MODE_LABELS[habit.streakMode] ?? habit.streakMode}</span>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <StreakBadge count={habit.streakCount} />
-                        <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
-                      </div>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
+                        <div className="flex items-center gap-3 shrink-0">
+                          <span className={`text-xs font-semibold ${streakColor}`}>🔥 {habit.streakCount}</span>
+                          <svg className="h-3.5 w-3.5 text-[#74777e]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                          </svg>
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </section>
         )}
       </main>
