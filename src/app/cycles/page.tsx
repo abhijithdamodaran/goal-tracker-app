@@ -85,10 +85,7 @@ export default async function CyclesPage() {
     <div className="min-h-screen bg-gray-50">
       <header className="border-b border-gray-200 bg-white px-4 py-4 shadow-sm">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/dashboard" className="text-sm text-gray-500 hover:text-gray-700">← Dashboard</Link>
-            <h1 className="text-base font-semibold text-gray-900">Cycles</h1>
-          </div>
+          <h1 className="text-base font-semibold text-gray-900">Cycles</h1>
           <Link href="/cycles/new" className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">
             + New cycle
           </Link>

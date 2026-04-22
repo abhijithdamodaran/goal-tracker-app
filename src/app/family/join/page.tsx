@@ -36,6 +36,8 @@ export default function FamilyJoinPage() {
   }
 
   return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center px-4 py-16">
+    <div className="w-full max-w-md">
     <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm space-y-6">
       <div className="text-center space-y-2">
         <h1 className="text-2xl font-bold text-gray-900">Join a family workspace</h1>
@@ -86,6 +88,8 @@ export default function FamilyJoinPage() {
           </button>
         </div>
       </form>
+    </div>
+    </div>
     </div>
   );
 }

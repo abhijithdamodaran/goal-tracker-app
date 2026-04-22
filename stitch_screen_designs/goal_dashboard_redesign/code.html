@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FocusTrack - Goal Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#201100",
+                        "on-primary-fixed": "#011d35",
+                        "surface": "#f6fafe",
+                        "secondary-fixed": "#cee5ff",
+                        "on-secondary-fixed-variant": "#2e4962",
+                        "surface-bright": "#f6fafe",
+                        "background": "#f6fafe",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e4e9ed",
+                        "surface-dim": "#d6dade",
+                        "on-secondary-container": "#48637d",
+                        "on-secondary-fixed": "#001d32",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#49607c",
+                        "on-primary-fixed-variant": "#314863",
+                        "on-tertiary-fixed": "#291800",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "outline": "#74777e",
+                        "inverse-primary": "#b0c9e8",
+                        "tertiary-container": "#3b2400",
+                        "primary-container": "#102a43",
+                        "inverse-surface": "#2c3134",
+                        "on-primary-container": "#7a92b0",
+                        "on-tertiary-fixed-variant": "#5d4119",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "outline-variant": "#c3c6ce",
+                        "on-tertiary-container": "#ad8a5a",
+                        "on-surface": "#171c1f",
+                        "tertiary-fixed-dim": "#e8c08c",
+                        "secondary-fixed-dim": "#aec9e7",
+                        "on-background": "#171c1f",
+                        "on-secondary": "#ffffff",
+                        "primary": "#00152a",
+                        "secondary-container": "#c4e0fe",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#43474d",
+                        "surface-variant": "#dfe3e7",
+                        "inverse-on-surface": "#edf1f5",
+                        "primary-fixed-dim": "#b0c9e8",
+                        "tertiary-fixed": "#ffddb4",
+                        "surface-container-highest": "#dfe3e7",
+                        "secondary": "#46617b",
+                        "primary-fixed": "#d1e4ff",
+                        "surface-container": "#eaeef2",
+                        "surface-container-low": "#f0f4f8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sm": "0.5rem",
+                        "md": "1rem",
+                        "xs": "0.25rem",
+                        "gutter": "24px",
+                        "unit": "8px",
+                        "xxl": "4rem",
+                        "lg": "1.5rem",
+                        "container-max": "1280px",
+                        "xl": "2.5rem"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "h1": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "h2": ["Inter"],
+                        "h3": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "h1": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.03em", "fontWeight": "600"}],
+                        "h2": ["30px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "h3": ["24px", {"lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f6fafe;
+        }
+    </style>
+</head>
+<body class="font-inter antialiased overflow-x-hidden">
+<div class="flex h-screen overflow-hidden">
+<aside class="hidden md:flex flex-col w-64 p-4 space-y-2 border-r border-[#DCE3E8] bg-white dark:bg-slate-950">
+<div class="px-2 py-4 mb-4">
+<h1 class="text-xl font-black text-slate-900 dark:text-white">FocusTrack</h1>
+<p class="text-xs text-slate-500">Quiet Productivity</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-slate-50 transition-colors font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                    Overview
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 bg-slate-100 text-slate-900 rounded-sm font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="target">target</span>
+                    My Goals
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-slate-50 transition-colors font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="view_kanban">view_kanban</span>
+                    Sprints
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-slate-50 transition-colors font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="equalizer">equalizer</span>
+                    Reports
+                </a>
+</nav>
+<button class="w-full bg-primary text-white py-2 px-4 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 mt-4 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+                New Goal
+            </button>
+<div class="pt-4 border-t border-[#DCE3E8] space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-slate-50 transition-colors font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                    Settings
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-slate-50 transition-colors font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+                    Help
+                </a>
+</div>
+<div class="flex items-center gap-3 px-3 py-4 mt-2">
+<img class="w-8 h-8 rounded-full border border-slate-200" data-alt="close-up portrait of a professional man in a minimal office setting with neutral colors and soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAzZg4U1J5pAVyiEvkz8xqiG_VGEXiW1ESgCmZ9uwq6aDA0Ig61PW3tg_5PamFMkr7sp38TCvdLlkRKu3j5654yEKVih9VFEwyJTCXZpEvVU5JWtQqtn2rUtXrp7upwCA2QrHx5KkjZPi83FZeBza0bpe56_xkS8iiHWIJhMbHxdp-kO8IVV448E5miJS0dRDnmE3bFHSTh0rDVhH_xb1ip8PVKIIghSHRMJl1Xe6gCjWlFqkhBxMVFAd86qphqg8Dv2WmvxcJNFo"/>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-slate-900">Alex Rivers</span>
+<span class="text-[10px] text-slate-500">Pro Plan</span>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col overflow-y-auto">
+<header class="flex justify-between items-center px-8 h-16 w-full z-50 bg-white border-b border-[#DCE3E8] sticky top-0">
+<div class="flex items-center gap-8">
+<span class="md:hidden text-lg font-bold text-slate-900">FocusTrack</span>
+<div class="hidden lg:flex items-center gap-6">
+<a class="text-slate-500 hover:text-slate-700 font-inter text-sm font-medium transition-all duration-200" href="#">Dashboard</a>
+<a class="text-slate-900 border-b-2 border-slate-900 font-semibold pb-1 font-inter text-sm transition-all duration-200" href="#">Weekly Sprint</a>
+<a class="text-slate-500 hover:text-slate-700 font-inter text-sm font-medium transition-all duration-200" href="#">Analytics</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-sm w-64 focus:outline-none focus:border-primary transition-colors" placeholder="Search tasks..." type="text"/>
+</div>
+<button class="p-2 hover:bg-slate-50 rounded-full transition-colors text-slate-600">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 hover:bg-slate-50 rounded-full transition-colors text-slate-600">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<div class="p-lg md:p-xxl max-w-container-max mx-auto w-full">
+<section class="mb-lg">
+<h2 class="text-h2 font-h2 text-slate-900 mb-xs">Goal Dashboard</h2>
+<p class="text-body-md font-body-md text-slate-500">Track your progress and maintain your quiet momentum.</p>
+</section>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md mb-xxl">
+<div class="bg-white border border-[#DCE3E8] p-lg flex flex-col justify-between h-32">
+<div class="flex justify-between items-start">
+<span class="text-label-sm font-label-sm text-slate-500 uppercase">Active Goals</span>
+<span class="material-symbols-outlined text-slate-400" data-icon="flag">flag</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-h1 font-h1 text-slate-900">12</span>
+<span class="text-label-sm text-emerald-600 flex items-center">+2 this month</span>
+</div>
+</div>
+<div class="bg-white border border-[#DCE3E8] p-lg flex flex-col justify-between h-32">
+<div class="flex justify-between items-start">
+<span class="text-label-sm font-label-sm text-slate-500 uppercase">Current Sprint</span>
+<span class="material-symbols-outlined text-slate-400" data-icon="schedule">schedule</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-h1 font-h1 text-slate-900">04</span>
+<span class="text-label-sm text-slate-400">days left</span>
+</div>
+</div>
+<div class="bg-white border border-[#DCE3E8] p-lg flex flex-col justify-between h-32">
+<div class="flex justify-between items-start">
+<span class="text-label-sm font-label-sm text-slate-500 uppercase">Habits Tracked</span>
+<span class="material-symbols-outlined text-slate-400" data-icon="check_circle">check_circle</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-h1 font-h1 text-slate-900">88%</span>
+<span class="text-label-sm text-emerald-600 flex items-center">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span>
+                                4%
+                            </span>
+</div>
+</div>
+<div class="bg-white border border-[#DCE3E8] p-lg flex flex-col justify-between h-32">
+<div class="flex justify-between items-start">
+<span class="text-label-sm font-label-sm text-slate-500 uppercase">Sprint Progress</span>
+<span class="material-symbols-outlined text-slate-400" data-icon="bar_chart">bar_chart</span>
+</div>
+<div class="w-full">
+<div class="flex justify-between mb-1">
+<span class="text-label-sm font-semibold">64%</span>
+</div>
+<div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[64%]"></div>
+</div>
+</div>
+</div>
+</div>
+<section>
+<div class="flex justify-between items-end mb-lg">
+<h3 class="text-h3 font-h3 text-slate-900">Active Goals</h3>
+<a class="text-label-md font-label-md text-primary hover:underline flex items-center gap-1" href="#">
+                            View All
+                            <span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-md">
+<div class="bg-white border border-[#DCE3E8] p-lg group hover:border-slate-400 transition-colors">
+<div class="flex justify-between items-start mb-lg">
+<div>
+<span class="inline-block px-2 py-0.5 bg-surface-container-low text-on-surface-variant text-[10px] font-bold uppercase rounded mb-2">Q3 Milestone</span>
+<h4 class="text-body-lg font-bold text-slate-900">Expand FocusTrack Core API</h4>
+</div>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer" data-icon="more_horiz">more_horiz</span>
+</div>
+<p class="text-body-md text-slate-500 mb-lg line-clamp-2">Implementation of the modular API architecture to support external integrations and automation workflows.</p>
+<div class="space-y-sm">
+<div class="flex justify-between items-center text-label-sm">
+<span class="text-slate-500">Progress</span>
+<span class="font-bold text-slate-900">75%</span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[75%]"></div>
+</div>
+</div>
+<div class="mt-lg flex justify-between items-center">
+<div class="flex -space-x-2">
+<img class="w-6 h-6 rounded-full border-2 border-white" data-alt="portrait of a focused software developer in a brightly lit modern office with clean lines" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARZ1aGZzc1T6k1qjaSwC6ApBQ_aKJeRdHnyjP98LkQP0jfbDg62ttHgTTb8SroxPnCNVJ5X8wE6x95MSBeZkK-IXi5MTfXsmIRqLXbzPc5IbazMO50-3SYotwy_0NlwANEv7-x09wEilk07cTWRKxFjvCzg32kwRKnaDG0XS5XscGryegPwH4Vcoozp2btFLC-iJLpw8eJw6giTQrkajsTkKLK98_4lLQnmoLy15hzjUeQ0TZZae94mcClDHdG-OmPJIcQdEUBy1A"/>
+<img class="w-6 h-6 rounded-full border-2 border-white" data-alt="professional woman in a minimal setting with natural lighting looking confidently at the camera" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBJhRrnySHz-YihTTBfV1N_1O2qSq8nFazzYh5Gxoocp1GJu610LMUNqv0grqmmpxAb4JGsfAa_NhFWJmHBgcGzVc5XTBK0nlWFDbl8akxpbIhWfFshviYBxdagd82tcn1O-Ixamtq2OTgM_SxBQjrt6M2Bo9FlewMTY_BUcvj7m-vCUMhXO3Vp00QGn7j-IERSbPcvgGrmnxrSXTt0AaTqjS02VNYoB4EacuruJWM_R-oGF-IkiKaf8RsUeJRpTNFvKeqMqEztiE"/>
+</div>
+<span class="text-label-sm text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="calendar_today">calendar_today</span>
+                                    Sep 30
+                                </span>
+</div>
+</div>
+<div class="bg-white border border-[#DCE3E8] p-lg group hover:border-slate-400 transition-colors">
+<div class="flex justify-between items-start mb-lg">
+<div>
+<span class="inline-block px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase rounded mb-2">Strategy</span>
+<h4 class="text-body-lg font-bold text-slate-900">Design System Refinement</h4>
+</div>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer" data-icon="more_horiz">more_horiz</span>
+</div>
+<p class="text-body-md text-slate-500 mb-lg line-clamp-2">Standardizing visual tokens and component architecture for the next phase of the product lifecycle.</p>
+<div class="space-y-sm">
+<div class="flex justify-between items-center text-label-sm">
+<span class="text-slate-500">Progress</span>
+<span class="font-bold text-slate-900">32%</span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[32%]"></div>
+</div>
+</div>
+<div class="mt-lg flex justify-between items-center">
+<div class="flex -space-x-2">
+<img class="w-6 h-6 rounded-full border-2 border-white" data-alt="professional designer working in a minimalist creative studio with high-end furniture and soft daylight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6AunmKDbmhjMva5db_zXPh2eCMq-b_NOkpqjjDQhAmgxtvNHYwzctyJYxv2-O4bAq5Mfb4XtqYM8vtTi_cwf553dvoPpQWwJh8XjtY89BqpZQIEV9kOHO2jmyFm9rmknfv2evM3gjuripitN6-6bKlrPybQsmnXyOe2HdlzBsfhWBWGguwiKgQ7m4HPMQHtRENO-CJ75d8VswuuU1b-4GiPiFdjMlLcz02KdQxByO2dp-DZn8ms-YIDESQLvW6FF7SiGMeL0lnvA"/>
+</div>
+<span class="text-label-sm text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="calendar_today">calendar_today</span>
+                                    Oct 15
+                                </span>
+</div>
+</div>
+<div class="bg-white border border-[#DCE3E8] p-lg group hover:border-slate-400 transition-colors">
+<div class="flex justify-between items-start mb-lg">
+<div>
+<span class="inline-block px-2 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-bold uppercase rounded mb-2">Personal</span>
+<h4 class="text-body-lg font-bold text-slate-900">Deep Work Habit Loop</h4>
+</div>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer" data-icon="more_horiz">more_horiz</span>
+</div>
+<p class="text-body-md text-slate-500 mb-lg line-clamp-2">Establishing 4 hours of uninterrupted focus time daily for complex problem solving.</p>
+<div class="space-y-sm">
+<div class="flex justify-between items-center text-label-sm">
+<span class="text-slate-500">Progress</span>
+<span class="font-bold text-slate-900">90%</span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[90%]"></div>
+</div>
+</div>
+<div class="mt-lg flex justify-between items-center">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-emerald-600 text-[18px]" data-icon="verified">verified</span>
+<span class="text-label-sm text-emerald-600">On Track</span>
+</div>
+<span class="text-label-sm text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="calendar_today">calendar_today</span>
+                                    Daily
+                                </span>
+</div>
+</div>
+<div class="bg-white border border-[#DCE3E8] p-lg group hover:border-slate-400 transition-colors">
+<div class="flex justify-between items-start mb-lg">
+<div>
+<span class="inline-block px-2 py-0.5 bg-error-container text-on-error-container text-[10px] font-bold uppercase rounded mb-2">Critical</span>
+<h4 class="text-body-lg font-bold text-slate-900">Infrastructure Scalability</h4>
+</div>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer" data-icon="more_horiz">more_horiz</span>
+</div>
+<p class="text-body-md text-slate-500 mb-lg line-clamp-2">Upgrading server-side resources to handle 2x projected traffic growth for the holiday period.</p>
+<div class="space-y-sm">
+<div class="flex justify-between items-center text-label-sm">
+<span class="text-slate-500">Progress</span>
+<span class="font-bold text-slate-900">15%</span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[15%]"></div>
+</div>
+</div>
+<div class="mt-lg flex justify-between items-center">
+<div class="flex -space-x-2">
+<img class="w-6 h-6 rounded-full border-2 border-white" data-alt="professional male architect in a minimal gray studio with architectural models in the background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJrJLMwc7Jfs1NjBrpKorq4m7L5Sc60vjXR8HjFTPVt9tIhPl2cnNVRpY8JOoAQSr93jI_UbFF72S4D0JAv9ka1tcxVZQJ-R3WZ1MCZO_NPE6l0bYVld-OwIhitJve8UnRIu-jLQQH2tGGy8Ct8PhNSgxgcSdTwD4pdhxtox_3z2CDNcVI1Dlpd0bJtYv8meEu10I57vDVmA79vc-jaEkU4kSJ-rWaEW5H_hC-DIKMo3PcpjVYbIo5Jamf7ySThBuTjf94-uGkkWQ"/>
+<img class="w-6 h-6 rounded-full border-2 border-white" data-alt="portrait of a confident female project manager in a clean white office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvqr8BnnpPSBlT5f7loWYMindptCTATBFCKl4101IorpIb5khmxJrJ_lRw_MjDLXPih018XzH14PvNCrt0pi5IFPtk7j1QwdN6YHLNA0CSi5DFw632pVFC-YFBUogwvBvaKRgelAvwlBfQM_76_gQA2yBsgbBCpSg69tqpZt01Ko1n-rf_1aFBELnPTjvJzmnQyZJFRTloIwene15bHV0mkk2XLrrnE9R3ABhqDntT1vTjRTmvWV1TsQnoDmEVb76TCOJ8gokXPh8"/>
+</div>
+<span class="text-label-sm text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="calendar_today">calendar_today</span>
+                                    Dec 12
+                                </span>
+</div>
+</div>
+</div>
+</section>
+<section class="mt-xxl">
+<div class="bg-surface-container-low border border-[#DCE3E8] p-xl flex flex-col md:flex-row items-center gap-lg">
+<div class="flex-1">
+<h3 class="text-h3 font-h3 text-slate-900 mb-sm">Ready for your next sprint?</h3>
+<p class="text-body-md text-slate-600">Review your past goals and plan the next 7 days of deep productivity.</p>
+</div>
+<div class="flex gap-md">
+<button class="px-6 py-2.5 border border-[#DCE3E8] text-slate-700 font-label-md bg-white hover:bg-slate-50 transition-colors">Archive Goals</button>
+<button class="px-6 py-2.5 bg-primary text-white font-label-md hover:opacity-90 transition-opacity">Start Planning</button>
+</div>
+</div>
+</section>
+</div>
+<footer class="mt-auto border-t border-[#DCE3E8] bg-white py-lg px-8 flex flex-col sm:flex-row justify-between items-center gap-md">
+<div class="text-label-sm text-slate-400">
+                    © 2024 FocusTrack. Designed for quiet productivity.
+                </div>
+<div class="flex gap-lg">
+<a class="text-label-sm text-slate-400 hover:text-slate-600 transition-colors" href="#">Privacy</a>
+<a class="text-label-sm text-slate-400 hover:text-slate-600 transition-colors" href="#">Terms</a>
+<a class="text-label-sm text-slate-400 hover:text-slate-600 transition-colors" href="#">Release Notes</a>
+</div>
+</footer>
+</main>
+</div>
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#DCE3E8] flex justify-around py-3 z-50">
+<a class="flex flex-col items-center gap-1 text-slate-900" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard" data-weight="fill">dashboard</span>
+<span class="text-[10px] font-bold">Overview</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="target">target</span>
+<span class="text-[10px]">Goals</span>
+</a>
+<div class="relative -top-8">
+<button class="bg-primary text-white p-4 rounded-full shadow-lg">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="view_kanban">view_kanban</span>
+<span class="text-[10px]">Sprints</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-[10px]">Settings</span>
+</a>
+</nav>
+</body></html>

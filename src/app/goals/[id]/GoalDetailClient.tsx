@@ -206,10 +206,10 @@ export default function GoalDetailClient({ goal, smart, isOwner }: Props) {
     <div className="min-h-screen bg-gray-50">
       <header className="border-b border-gray-200 bg-white px-4 py-4 shadow-sm">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/dashboard" className="text-sm text-gray-500 hover:text-gray-700">← Dashboard</Link>
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <Link href="/goals" className="hover:text-gray-700">Goals</Link>
             <span className="text-gray-300">/</span>
-            <span className="text-sm text-gray-500">Goals</span>
+            <span className="truncate max-w-48">{goal.title}</span>
           </div>
           <div className="flex items-center gap-3">
             <ScoreBadge score={goal.smartScore} />

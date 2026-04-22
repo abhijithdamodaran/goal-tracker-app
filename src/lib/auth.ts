@@ -32,9 +32,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const userId = (user?.id ?? token.id) as string;
         const dbUser = await prisma.user.findUnique({
           where: { id: userId },
-          select: { onboardingCompleted: true },
+          select: { onboardingCompleted: true, homeScreen: true },
         });
         token.onboardingCompleted = dbUser?.onboardingCompleted ?? false;
+        token.homeScreen = dbUser?.homeScreen ?? "today";
       }
       return token;
     },
@@ -43,6 +44,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (session.user && token.id) {
         session.user.id = token.id as string;
         session.user.onboardingCompleted = (token.onboardingCompleted as boolean) ?? false;
+        session.user.homeScreen = (token.homeScreen as string) ?? "today";
       }
       return session;
     },

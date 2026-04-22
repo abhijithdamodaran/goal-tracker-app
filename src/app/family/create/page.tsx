@@ -44,9 +44,15 @@ export default function FamilyCreatePage() {
     }
   }
 
+  const Shell = ({ children }: { children: React.ReactNode }) => (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center px-4 py-16">
+      <div className="w-full max-w-md">{children}</div>
+    </div>
+  );
+
   if (inviteCode) {
     return (
-      <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm text-center space-y-6">
+      <Shell><div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm text-center space-y-6">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-green-100">
           <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -67,12 +73,12 @@ export default function FamilyCreatePage() {
         >
           Go to dashboard
         </button>
-      </div>
+      </div></Shell>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm space-y-6">
+    <Shell><div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm space-y-6">
       <div className="text-center space-y-2">
         <h1 className="text-2xl font-bold text-gray-900">Create a family workspace</h1>
         <p className="text-gray-600">Give your shared space a name — you can invite your partner after.</p>
@@ -120,6 +126,6 @@ export default function FamilyCreatePage() {
           </button>
         </div>
       </form>
-    </div>
+    </div></Shell>
   );
 }

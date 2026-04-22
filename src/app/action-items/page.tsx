@@ -60,10 +60,7 @@ export default function ActionItemsPage() {
     <div className="min-h-screen bg-gray-50">
       <header className="border-b border-gray-200 bg-white px-4 py-4 shadow-sm">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/dashboard" className="text-sm text-gray-500 hover:text-gray-700">← Dashboard</Link>
-            <h1 className="text-base font-semibold text-gray-900">Action Items</h1>
-          </div>
+          <h1 className="text-base font-semibold text-gray-900">Action Items</h1>
         </div>
       </header>
 

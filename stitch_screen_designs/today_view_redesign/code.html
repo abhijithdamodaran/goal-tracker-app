@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "tertiary": "#201100",
+                  "on-primary-fixed": "#011d35",
+                  "surface": "#f6fafe",
+                  "secondary-fixed": "#cee5ff",
+                  "on-secondary-fixed-variant": "#2e4962",
+                  "surface-bright": "#f6fafe",
+                  "background": "#f6fafe",
+                  "on-error-container": "#93000a",
+                  "surface-container-high": "#e4e9ed",
+                  "surface-dim": "#d6dade",
+                  "on-secondary-container": "#48637d",
+                  "on-secondary-fixed": "#001d32",
+                  "error": "#ba1a1a",
+                  "surface-tint": "#49607c",
+                  "on-primary-fixed-variant": "#314863",
+                  "on-tertiary-fixed": "#291800",
+                  "on-primary": "#ffffff",
+                  "error-container": "#ffdad6",
+                  "outline": "#74777e",
+                  "inverse-primary": "#b0c9e8",
+                  "tertiary-container": "#3b2400",
+                  "primary-container": "#102a43",
+                  "inverse-surface": "#2c3134",
+                  "on-primary-container": "#7a92b0",
+                  "on-tertiary-fixed-variant": "#5d4119",
+                  "on-error": "#ffffff",
+                  "on-tertiary": "#ffffff",
+                  "outline-variant": "#c3c6ce",
+                  "on-tertiary-container": "#ad8a5a",
+                  "on-surface": "#171c1f",
+                  "tertiary-fixed-dim": "#e8c08c",
+                  "secondary-fixed-dim": "#aec9e7",
+                  "on-background": "#171c1f",
+                  "on-secondary": "#ffffff",
+                  "primary": "#00152a",
+                  "secondary-container": "#c4e0fe",
+                  "surface-container-lowest": "#ffffff",
+                  "on-surface-variant": "#43474d",
+                  "surface-variant": "#dfe3e7",
+                  "inverse-on-surface": "#edf1f5",
+                  "primary-fixed-dim": "#b0c9e8",
+                  "tertiary-fixed": "#ffddb4",
+                  "surface-container-highest": "#dfe3e7",
+                  "secondary": "#46617b",
+                  "primary-fixed": "#d1e4ff",
+                  "surface-container": "#eaeef2",
+                  "surface-container-low": "#f0f4f8"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.125rem",
+                  "lg": "0.25rem",
+                  "xl": "0.5rem",
+                  "full": "0.75rem"
+          },
+          "spacing": {
+                  "sm": "0.5rem",
+                  "md": "1rem",
+                  "xs": "0.25rem",
+                  "gutter": "24px",
+                  "unit": "8px",
+                  "xxl": "4rem",
+                  "lg": "1.5rem",
+                  "container-max": "1280px",
+                  "xl": "2.5rem"
+          },
+          "fontFamily": {
+                  "label-md": ["Inter"],
+                  "h1": ["Inter"],
+                  "body-md": ["Inter"],
+                  "body-lg": ["Inter"],
+                  "label-sm": ["Inter"],
+                  "h2": ["Inter"],
+                  "h3": ["Inter"]
+          },
+          "fontSize": {
+                  "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                  "h1": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                  "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                  "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                  "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.03em", "fontWeight": "600"}],
+                  "h2": ["30px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                  "h3": ["24px", {"lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "500"}]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-surface text-on-surface antialiased flex h-screen overflow-hidden">
+<!-- SideNavBar Component -->
+<aside class="hidden md:flex flex-col w-64 p-4 space-y-2 border-r border-[#DCE3E8] bg-white h-screen">
+<div class="px-2 py-4 mb-4">
+<h1 class="text-xl font-black text-slate-900 tracking-tight">FocusTrack</h1>
+<p class="text-xs text-slate-500 font-medium uppercase tracking-wider">Quiet Productivity</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-3 py-2 bg-slate-100 text-slate-900 rounded-sm font-inter text-sm font-medium transition-all active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+        Overview
+      </a>
+<a class="flex items-center px-3 py-2 text-slate-500 hover:bg-slate-50 rounded-sm font-inter text-sm font-medium transition-colors" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="target">target</span>
+        My Goals
+      </a>
+<a class="flex items-center px-3 py-2 text-slate-500 hover:bg-slate-50 rounded-sm font-inter text-sm font-medium transition-colors" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="view_kanban">view_kanban</span>
+        Sprints
+      </a>
+<a class="flex items-center px-3 py-2 text-slate-500 hover:bg-slate-50 rounded-sm font-inter text-sm font-medium transition-colors" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="equalizer">equalizer</span>
+        Reports
+      </a>
+</nav>
+<div class="pt-4 border-t border-[#DCE3E8] space-y-1">
+<button class="w-full bg-primary text-white font-label-md text-label-md py-3 rounded-lg mb-4 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+        New Goal
+      </button>
+<a class="flex items-center px-3 py-2 text-slate-500 hover:bg-slate-50 rounded-sm font-inter text-sm font-medium transition-colors" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="settings">settings</span>
+        Settings
+      </a>
+<a class="flex items-center px-3 py-2 text-slate-500 hover:bg-slate-50 rounded-sm font-inter text-sm font-medium transition-colors" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="help_outline">help_outline</span>
+        Help
+      </a>
+</div>
+</aside>
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- TopNavBar Component -->
+<header class="flex justify-between items-center px-8 h-16 w-full z-50 bg-white border-b border-[#DCE3E8] font-inter text-sm antialiased tracking-tight">
+<div class="flex items-center gap-8">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-lg text-sm focus:ring-1 focus:ring-primary w-64" placeholder="Search tasks..." type="text"/>
+</div>
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-slate-900 border-b-2 border-slate-900 font-semibold pb-1" href="#">Dashboard</a>
+<a class="text-slate-500 hover:text-slate-700 transition-all duration-200" href="#">Weekly Sprint</a>
+<a class="text-slate-500 hover:text-slate-700 transition-all duration-200" href="#">Analytics</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-slate-200">
+<img alt="User profile" data-alt="Professional portrait of a man in a business casual outfit with soft studio lighting and neutral grey background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9IvVELHG76PhiTh7Cvh9kGa6RZ9hEWwkBL-x-lfwRIvxPuH8aNC9ChrjvUvgvI3fyvfksMOdjGH4BvLcPFAc47So1QlS_gik71oPwDJaqjBmHprxMZKNhLF_mlXYdDd3ABeOludrWRoEpUfgkMMhDo47sxGIUpnoN08kzvaJR3pKn_bDY8O0WOFQKoquTLzb-RmxtUtfxzMCqfT9vn3-745i90ZgqsDIZnbARMhxihnExIDDxC2u_fYeKF6itjLe7J_BATi2O0vY"/>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="flex-1 overflow-y-auto p-8 max-w-7xl mx-auto w-full">
+<!-- Welcome & Date Header -->
+<div class="mb-xxl">
+<p class="text-slate-500 font-label-md text-label-md mb-xs">Tuesday, October 24</p>
+<h2 class="font-h1 text-h1 text-primary">Today's Focus</h2>
+</div>
+<!-- High Level Progress Section (Asymmetric Layout) -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-lg mb-xxl">
+<!-- Progress Summary Card -->
+<div class="md:col-span-8 bg-white border border-[#DCE3E8] p-lg flex flex-col md:flex-row items-center gap-xl">
+<div class="flex-1">
+<h3 class="font-h3 text-h3 text-primary mb-md">Daily Momentum</h3>
+<p class="text-slate-600 font-body-md text-body-md mb-lg">You've completed 65% of your planned activities today. Keep the focus sharp to clear your sprint backlog.</p>
+<div class="flex gap-md">
+<span class="inline-flex items-center px-3 py-1 bg-surface-container-low text-slate-700 rounded-full text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-sm mr-1" data-icon="trending_up">trending_up</span>
+                +12% vs Yesterday
+              </span>
+<span class="inline-flex items-center px-3 py-1 bg-surface-container-low text-slate-700 rounded-full text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-sm mr-1" data-icon="schedule">schedule</span>
+                4h Deep Work
+              </span>
+</div>
+</div>
+<div class="flex gap-lg shrink-0">
+<!-- Habits Ring -->
+<div class="flex flex-col items-center">
+<div class="relative w-32 h-32 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90">
+<circle class="text-slate-100" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-dasharray="364.4" stroke-dashoffset="72.8" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-xl font-bold text-primary">80%</span>
+</div>
+</div>
+<span class="mt-md font-label-md text-label-md text-slate-500">Habits</span>
+</div>
+<!-- Sprint Ring -->
+<div class="flex flex-col items-center">
+<div class="relative w-32 h-32 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90">
+<circle class="text-slate-100" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-secondary" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-dasharray="364.4" stroke-dashoffset="182.2" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-xl font-bold text-primary">50%</span>
+</div>
+</div>
+<span class="mt-md font-label-md text-label-md text-slate-500">Sprint</span>
+</div>
+</div>
+</div>
+<!-- Quote Card (Decorative/Motivational) -->
+<div class="md:col-span-4 bg-primary text-on-primary-container p-lg flex flex-col justify-between">
+<span class="material-symbols-outlined text-4xl opacity-40" data-icon="format_quote">format_quote</span>
+<p class="font-body-lg text-body-lg italic leading-relaxed text-white">"Efficiency is doing things right; effectiveness is doing the right things."</p>
+<p class="font-label-sm text-label-sm mt-lg text-on-primary-container">— Peter Drucker</p>
+</div>
+</div>
+<!-- Main Columns -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-xxl">
+<!-- Habits Section -->
+<section>
+<div class="flex items-center justify-between mb-lg">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="auto_awesome">auto_awesome</span>
+<h3 class="font-h3 text-h3 text-primary">Habits Today</h3>
+</div>
+<button class="text-primary font-label-sm text-label-sm hover:underline">Manage Habits</button>
+</div>
+<div class="space-y-sm">
+<!-- Habit Item -->
+<div class="bg-white border border-[#DCE3E8] p-lg flex items-center group hover:bg-surface-container-low transition-colors">
+<div class="w-6 h-6 border-2 border-primary rounded-sm flex items-center justify-center mr-lg cursor-pointer bg-primary">
+<span class="material-symbols-outlined text-white text-sm" data-icon="check" data-weight="fill">check</span>
+</div>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-primary">Morning Meditation</h4>
+<p class="text-xs text-slate-500">15 minutes focus session</p>
+</div>
+<div class="text-right">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="local_fire_department" data-weight="fill">local_fire_department</span>
+<span class="font-label-sm text-label-sm">12 day streak</span>
+</div>
+</div>
+</div>
+<!-- Habit Item -->
+<div class="bg-white border border-[#DCE3E8] p-lg flex items-center group hover:bg-surface-container-low transition-colors">
+<div class="w-6 h-6 border-2 border-slate-300 rounded-sm flex items-center justify-center mr-lg cursor-pointer group-hover:border-primary"></div>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-primary">Deep Work Session</h4>
+<p class="text-xs text-slate-500">90 minutes uninterrupted</p>
+</div>
+<div class="text-right">
+<div class="flex items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined text-sm" data-icon="local_fire_department">local_fire_department</span>
+<span class="font-label-sm text-label-sm">8 day streak</span>
+</div>
+</div>
+</div>
+<!-- Habit Item -->
+<div class="bg-white border border-[#DCE3E8] p-lg flex items-center group hover:bg-surface-container-low transition-colors">
+<div class="w-6 h-6 border-2 border-primary rounded-sm flex items-center justify-center mr-lg cursor-pointer bg-primary">
+<span class="material-symbols-outlined text-white text-sm" data-icon="check" data-weight="fill">check</span>
+</div>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-primary">Post-lunch Walk</h4>
+<p class="text-xs text-slate-500">20 minutes light activity</p>
+</div>
+<div class="text-right">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="local_fire_department" data-weight="fill">local_fire_department</span>
+<span class="font-label-sm text-label-sm">3 day streak</span>
+</div>
+</div>
+</div>
+<!-- Habit Item -->
+<div class="bg-white border border-[#DCE3E8] p-lg flex items-center group hover:bg-surface-container-low transition-colors opacity-60">
+<div class="w-6 h-6 border-2 border-slate-300 rounded-sm flex items-center justify-center mr-lg cursor-pointer"></div>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-primary">No Social Media</h4>
+<p class="text-xs text-slate-500">Until 6:00 PM</p>
+</div>
+<div class="text-right">
+<div class="flex items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined text-sm" data-icon="local_fire_department">local_fire_department</span>
+<span class="font-label-sm text-label-sm">0 day streak</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Sprint Items Section -->
+<section>
+<div class="flex items-center justify-between mb-lg">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="bolt">bolt</span>
+<h3 class="font-h3 text-h3 text-primary">Sprint Items</h3>
+</div>
+<div class="flex items-center gap-sm">
+<span class="text-label-sm font-label-sm text-slate-500 uppercase">Cycle 42</span>
+<button class="p-1 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="more_horiz">more_horiz</span>
+</button>
+</div>
+</div>
+<div class="space-y-sm">
+<!-- Sprint Task Item -->
+<div class="bg-white border border-[#DCE3E8] p-lg hover:border-primary transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-md">
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-wider rounded-sm">High Priority</span>
+<span class="text-slate-400 text-xs">Due 4h</span>
+</div>
+<h4 class="font-label-md text-label-md text-primary mb-xs">Refactor Dashboard Layout Engine</h4>
+<p class="text-body-md text-body-md text-slate-500 mb-lg">Implement CSS Grid for the new high-end bento layouts and glassmorphism components.</p>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<img class="w-6 h-6 rounded-full border-2 border-white" data-alt="Portrait of a woman with short hair and clear skin in soft daylight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyrYz32--ESuvHkINpdBPqFEUyT8XD9tUmlV2T4mAVjzPNyCpNlhB6B6PU396KVvNmzJk3lob6sIQ6m43GUg9mfcsoOhDulBkLzyVqgzEByUIVvDOiQSyLb2TrV3wjSqLHEf2yMfcPvUEKK9r1vLZrBI1acojwjopHqU1uCj4PmL3YLKkAHNuhhB3BQK9g2IPX4N4xUlLMfZuohf69ah3wzuU1kgygmjcLhCEOmh1KtT1P_jEuQEnWIExkpOaNnrUKfdiEZkdjsqg"/>
+<img class="w-6 h-6 rounded-full border-2 border-white" data-alt="Close up of a smiling man with a beard and a crisp white shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnDVuDh4r0ctHl3NznnQvZJD5AJdRMd0WDEtbVoSWs1Anq5VD4uyS068eE3Ys4lJcf686MDOtcG8MZ8RbFB-zhdkBitWRWGbW02YsgcJwLeWjzNQ6azErDXGURk81txa5djqhdjiTt84PK_JA8JCASMnV91Ko8a7b0QoN-2JjQMGbLvhjjvnMVbA6HeEbt9mY5LfPtLkkN7kly4jDlzmZcjh5poEUt7QZ0tRCWAWaAJ4Piuf68cM75qA1FolZYHEWlCilYkzRQ8n8"/>
+</div>
+<div class="flex items-center gap-md text-slate-400">
+<span class="flex items-center text-xs gap-1"><span class="material-symbols-outlined text-sm" data-icon="attachment">attachment</span> 3</span>
+<span class="flex items-center text-xs gap-1"><span class="material-symbols-outlined text-sm" data-icon="chat_bubble_outline">chat_bubble_outline</span> 12</span>
+</div>
+</div>
+</div>
+<!-- Sprint Task Item -->
+<div class="bg-white border border-[#DCE3E8] p-lg hover:border-primary transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-md">
+<span class="px-2 py-1 bg-surface-container-low text-slate-600 text-[10px] font-bold uppercase tracking-wider rounded-sm">Technical Debt</span>
+<span class="text-slate-400 text-xs">Tomorrow</span>
+</div>
+<h4 class="font-label-md text-label-md text-primary mb-xs">Optimize Material Symbols Loading</h4>
+<p class="text-body-md text-body-md text-slate-500 mb-lg">Reduce font weight overhead by implementing subsets for frequently used icons.</p>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<img class="w-6 h-6 rounded-full border-2 border-white" data-alt="Portrait of a smiling professional in a modern office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6fqOJSMs53XLcQ6H7yXHbiCN4BW_fKikDTygubmeesiaeuVbA0sd6jq-RPkHGL-C0nIfBq0h1spGLz2Pe3IBIr_G-I-2fW3WVxep8RpQwpykRXhER5LslBRBbxSpEN20CMEUnyBoPgvoQ5hHOtzVtj01U_xzsgVSwIjAG8EMfFiOsSoOkEwE9JhTAKVmnxnE72B05t2WFmdEvd0w6ldtozwYtjCDlFfOtb4i9i2t3YTJMeQHoQwjoBaeGMA8MinEo_yUTRu_TviU"/>
+</div>
+<div class="flex items-center gap-md text-slate-400">
+<span class="flex items-center text-xs gap-1"><span class="material-symbols-outlined text-sm" data-icon="chat_bubble_outline">chat_bubble_outline</span> 2</span>
+</div>
+</div>
+</div>
+<!-- Sprint Task Item - Completed State -->
+<div class="bg-surface-container border border-[#DCE3E8] p-lg opacity-60">
+<div class="flex justify-between items-start mb-md">
+<span class="flex items-center gap-1 text-green-600 text-[10px] font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-xs" data-icon="check_circle" data-weight="fill">check_circle</span>
+                  Completed
+                </span>
+</div>
+<h4 class="font-label-md text-label-md text-primary mb-xs line-through">Design Style Guidance Document</h4>
+<div class="flex items-center justify-between mt-md">
+<span class="text-slate-400 text-xs">Done at 10:45 AM</span>
+<div class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center text-[10px] font-bold text-slate-500">JS</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Mobile BottomNavBar (Hidden on desktop) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-[#DCE3E8] flex justify-around items-center px-4 z-50">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10px] font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="view_kanban">view_kanban</span>
+<span class="text-[10px] font-medium">Sprint</span>
+</a>
+<div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center -mt-8 shadow-lg">
+<span class="material-symbols-outlined text-white" data-icon="add">add</span>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="target">target</span>
+<span class="text-[10px] font-medium">Goals</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-[10px] font-medium">Settings</span>
+</a>
+</nav>
+</body></html>

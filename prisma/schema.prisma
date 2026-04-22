@@ -66,6 +66,9 @@ model User {
   /// IANA timezone chosen during onboarding (e.g. "America/New_York"). Default UTC.
   timezone String @default("UTC")
 
+  /// Preferred home screen: "today" | "sprint" | "dashboard"
+  homeScreen String @default("today")
+
   // NextAuth relations
   accounts Account[]
   sessions Session[]

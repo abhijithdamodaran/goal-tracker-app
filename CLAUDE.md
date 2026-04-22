@@ -369,7 +369,7 @@ Legend: ✅ Complete · 🔄 In progress · ⬜ Not started
 
 ---
 
-## Phase 7 — Home Screen + Navigation ⬜
+## Phase 7 — Home Screen + Navigation ✅
 
 **Goal:** Polished navigation, configurable home screen, Goal Dashboard view.
 

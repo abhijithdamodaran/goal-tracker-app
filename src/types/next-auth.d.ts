@@ -18,16 +18,15 @@ declare module "next-auth" {
        * False for brand-new users; true once they finish onboarding.
        */
       onboardingCompleted: boolean;
+      /** Preferred home screen: "today" | "sprint" | "dashboard" */
+      homeScreen: string;
     } & DefaultSession["user"];
   }
 
   interface User {
     /** Database user ID (UUID) */
     id: string;
-    /**
-     * Whether the user has completed the post-signup onboarding wizard.
-     * False for brand-new users; true once they finish onboarding.
-     */
     onboardingCompleted: boolean;
+    homeScreen: string;
   }
 }

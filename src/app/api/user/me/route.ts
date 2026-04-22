@@ -34,6 +34,8 @@ export async function GET() {
         email: true,
         image: true,
         createdAt: true,
+        timezone: true,
+        homeScreen: true,
         familyMemberships: {
           include: {
             workspace: {
@@ -85,6 +87,8 @@ export async function GET() {
         email: dbUser.email,
         image: dbUser.image,
         createdAt: dbUser.createdAt,
+        timezone: dbUser.timezone,
+        homeScreen: dbUser.homeScreen,
       },
       familyWorkspace,
     });
@@ -111,35 +115,38 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  let body: { name?: string; image?: string };
+  let body: { name?: string; image?: string; timezone?: string; homeScreen?: string };
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const { name, image } = body;
+  const { name, image, timezone, homeScreen } = body;
 
-  // Validate inputs
-  if (name !== undefined && (typeof name !== "string" || name.trim().length === 0 || name.length > 100)) {
-    return NextResponse.json(
-      { error: "Name must be a non-empty string of at most 100 characters." },
-      { status: 400 }
-    );
+  if (name !== undefined && name !== null && (typeof name !== "string" || name.length > 100)) {
+    return NextResponse.json({ error: "Name must be a string of at most 100 characters." }, { status: 400 });
   }
 
-  if (image !== undefined && typeof image !== "string") {
-    return NextResponse.json({ error: "Image must be a string URL." }, { status: 400 });
+  if (timezone !== undefined && typeof timezone !== "string") {
+    return NextResponse.json({ error: "Timezone must be a string." }, { status: 400 });
+  }
+
+  const VALID_HOME_SCREENS = ["today", "sprint", "dashboard"];
+  if (homeScreen !== undefined && !VALID_HOME_SCREENS.includes(homeScreen)) {
+    return NextResponse.json({ error: "Invalid homeScreen value." }, { status: 400 });
   }
 
   try {
     const updated = await prisma.user.update({
       where: { id: user.id },
       data: {
-        ...(name !== undefined && { name: name.trim() }),
+        ...(name !== undefined && { name: name ? name.trim() : null }),
         ...(image !== undefined && { image }),
+        ...(timezone !== undefined && { timezone }),
+        ...(homeScreen !== undefined && { homeScreen }),
       },
-      select: { id: true, name: true, email: true, image: true, createdAt: true },
+      select: { id: true, name: true, email: true, image: true, timezone: true, homeScreen: true, createdAt: true },
     });
 
     return NextResponse.json({ user: updated });

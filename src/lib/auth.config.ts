@@ -56,12 +56,12 @@ export const authConfig: NextAuthConfig = {
         if (!credentials?.email || !credentials?.password) return null;
         const user = await prisma.user.findUnique({
           where: { email: credentials.email as string },
-          select: { id: true, name: true, email: true, image: true, password: true, onboardingCompleted: true },
+          select: { id: true, name: true, email: true, image: true, password: true, onboardingCompleted: true, homeScreen: true },
         });
         if (!user?.password) return null;
         const valid = await bcrypt.compare(credentials.password as string, user.password);
         if (!valid) return null;
-        return { id: user.id, name: user.name, email: user.email, image: user.image, onboardingCompleted: user.onboardingCompleted };
+        return { id: user.id, name: user.name, email: user.email, image: user.image, onboardingCompleted: user.onboardingCompleted, homeScreen: user.homeScreen };
       },
     }),
   ],

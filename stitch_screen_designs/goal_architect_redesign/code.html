@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Goal Architect | FocusTrack</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#201100",
+                        "on-primary-fixed": "#011d35",
+                        "surface": "#f6fafe",
+                        "secondary-fixed": "#cee5ff",
+                        "on-secondary-fixed-variant": "#2e4962",
+                        "surface-bright": "#f6fafe",
+                        "background": "#f6fafe",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e4e9ed",
+                        "surface-dim": "#d6dade",
+                        "on-secondary-container": "#48637d",
+                        "on-secondary-fixed": "#001d32",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#49607c",
+                        "on-primary-fixed-variant": "#314863",
+                        "on-tertiary-fixed": "#291800",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "outline": "#74777e",
+                        "inverse-primary": "#b0c9e8",
+                        "tertiary-container": "#3b2400",
+                        "primary-container": "#102a43",
+                        "inverse-surface": "#2c3134",
+                        "on-primary-container": "#7a92b0",
+                        "on-tertiary-fixed-variant": "#5d4119",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "outline-variant": "#c3c6ce",
+                        "on-tertiary-container": "#ad8a5a",
+                        "on-surface": "#171c1f",
+                        "tertiary-fixed-dim": "#e8c08c",
+                        "secondary-fixed-dim": "#aec9e7",
+                        "on-background": "#171c1f",
+                        "on-secondary": "#ffffff",
+                        "primary": "#00152a",
+                        "secondary-container": "#c4e0fe",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#43474d",
+                        "surface-variant": "#dfe3e7",
+                        "inverse-on-surface": "#edf1f5",
+                        "primary-fixed-dim": "#b0c9e8",
+                        "tertiary-fixed": "#ffddb4",
+                        "surface-container-highest": "#dfe3e7",
+                        "secondary": "#46617b",
+                        "primary-fixed": "#d1e4ff",
+                        "surface-container": "#eaeef2",
+                        "surface-container-low": "#f0f4f8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sm": "0.5rem",
+                        "md": "1rem",
+                        "xs": "0.25rem",
+                        "gutter": "24px",
+                        "unit": "8px",
+                        "xxl": "4rem",
+                        "lg": "1.5rem",
+                        "container-max": "1280px",
+                        "xl": "2.5rem"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "h1": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "h2": ["Inter"],
+                        "h3": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "h1": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.03em", "fontWeight": "600"}],
+                        "h2": ["30px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "h3": ["24px", {"lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- TopNavBar (Shared Component) -->
+<header class="flex justify-between items-center px-8 h-16 w-full z-50 bg-white dark:bg-slate-950 font-inter text-sm antialiased tracking-tight docked full-width top-0 border-b rounded-none border-[#DCE3E8] dark:border-slate-800 transition-all duration-200 ease-in-out fixed">
+<div class="flex items-center space-x-8">
+<span class="text-lg font-bold text-slate-900 dark:text-white">FocusTrack</span>
+<nav class="hidden md:flex space-x-6 h-full items-center">
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-all duration-200 ease-in-out" href="#">Dashboard</a>
+<a class="text-slate-900 dark:text-white border-b-2 border-slate-900 dark:border-white font-semibold pb-1 transition-all duration-200 ease-in-out" href="#">Weekly Sprint</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-all duration-200 ease-in-out" href="#">Analytics</a>
+</nav>
+</div>
+<div class="flex items-center space-x-4">
+<button class="p-2 hover:bg-slate-50 dark:hover:bg-slate-900/50 rounded-full transition-all duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 hover:bg-slate-50 dark:hover:bg-slate-900/50 rounded-full transition-all duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden border border-slate-200">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="Close-up professional portrait of a woman in a bright studio with soft neutral background and clean lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzWfDLNSafgc0x7dDidp1L-OS1SYPDFw54zA62PBsZSvXwI6Eb-RKVeWEWmxxzdCaiCWEjq5aMLNZqASpMo91M-6mMLNNrJoRFGKgTLnmovEzXsc8RRk014yRdXzgUcgJygvsqN39apKOt361rqL0d0HUu2h-yJdmgtT7OIDT4uNMPos1tyC38RZrMS1FomMZuaNf9PlsFHXe_NL4fDqgtU-aEJkNUIOEwq0hx3DBjnjgggh5YNwfaYNvo-6tp9ajktJNxs6LQ5Y8"/>
+</div>
+</div>
+</header>
+<main class="pt-16 min-h-screen flex">
+<!-- SideNavBar (Shared Component) -->
+<aside class="hidden lg:flex flex-col w-64 p-4 space-y-2 border-r border-[#DCE3E8] dark:border-slate-800 bg-white dark:bg-slate-950 font-inter text-sm font-medium h-screen sticky top-16">
+<div class="mb-4 px-2">
+<div class="flex items-center space-x-3 mb-6">
+<div class="w-10 h-10 rounded-sm bg-primary-container flex items-center justify-center text-white">
+<span class="material-symbols-outlined" data-icon="architecture">architecture</span>
+</div>
+<div>
+<h2 class="text-xl font-black text-slate-900 dark:text-white leading-none">Goal Architect</h2>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Quiet Productivity</p>
+</div>
+</div>
+<button class="w-full py-2 bg-primary text-white rounded-sm font-semibold flex items-center justify-center space-x-2 active:opacity-80 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+<span>New Goal</span>
+</button>
+</div>
+<div class="space-y-1">
+<a class="flex items-center space-x-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Overview</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white rounded-sm transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="target">target</span>
+<span class="font-bold">My Goals</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="view_kanban">view_kanban</span>
+<span>Sprints</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="equalizer">equalizer</span>
+<span>Reports</span>
+</a>
+</div>
+<div class="mt-auto border-t border-[#DCE3E8] pt-4">
+<a class="flex items-center space-x-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span>Help</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<div class="flex-1 max-w-full overflow-x-hidden">
+<div class="max-w-6xl mx-auto px-8 py-xxl flex flex-col lg:flex-row gap-lg">
+<!-- Goal Construction Section -->
+<div class="flex-1 space-y-lg">
+<div class="mb-lg">
+<nav class="flex items-center space-x-2 text-label-sm text-on-surface-variant mb-2">
+<span>My Goals</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-primary font-bold">New Goal</span>
+</nav>
+<h1 class="font-h1 text-h1 text-primary">Goal Architect</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Construct a goal that withstands the pressure of execution.</p>
+</div>
+<div class="bg-white border border-[#DCE3E8] p-lg space-y-lg rounded-lg">
+<div class="space-y-sm">
+<label class="font-label-md text-label-md text-primary">Goal Title</label>
+<input class="w-full border border-[#DCE3E8] p-md focus:ring-0 focus:border-primary transition-all duration-200 outline-none text-body-md" placeholder="e.g. Master React and Tailwind for UI Design" type="text" value="Master the Art of Goal Architecting"/>
+</div>
+<div class="space-y-sm">
+<label class="font-label-md text-label-md text-primary">Detailed Description</label>
+<textarea class="w-full border border-[#DCE3E8] p-md focus:ring-0 focus:border-primary transition-all duration-200 outline-none text-body-md resize-none" placeholder="Describe the outcome, the process, and the definition of done..." rows="6">I want to develop a comprehensive understanding of the Goal Architect flow by designing 5 unique interfaces this week. This will help me internalize the SMART framework within the context of FocusTrack's UI identity. I'll measure success by completing the design of the validator sidebar and form fields with high precision.</textarea>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="space-y-sm">
+<label class="font-label-md text-label-md text-primary">Target Deadline</label>
+<div class="relative">
+<input class="w-full border border-[#DCE3E8] p-md focus:ring-0 focus:border-primary transition-all duration-200 outline-none text-body-md" type="date"/>
+</div>
+</div>
+<div class="space-y-sm">
+<label class="font-label-md text-label-md text-primary">Metric of Success</label>
+<input class="w-full border border-[#DCE3E8] p-md focus:ring-0 focus:border-primary transition-all duration-200 outline-none text-body-md" placeholder="e.g. 5 completed projects" type="text"/>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-md">
+<button class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors flex items-center space-x-2">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+<span>Discard Draft</span>
+</button>
+<div class="flex space-x-md">
+<button class="px-lg py-md border border-[#DCE3E8] text-primary font-semibold hover:bg-surface-container-low transition-colors rounded-sm">Save as Template</button>
+<button class="px-xl py-md bg-primary text-white font-semibold hover:bg-primary/90 transition-colors rounded-sm">Launch Goal</button>
+</div>
+</div>
+</div>
+<!-- SMART Score Sidebar -->
+<aside class="w-full lg:w-96 space-y-md">
+<div class="bg-white border border-[#DCE3E8] rounded-lg overflow-hidden">
+<div class="p-lg bg-primary-container text-white">
+<div class="flex justify-between items-center mb-md">
+<span class="font-label-sm text-label-sm text-on-primary-container uppercase tracking-widest">SMART Score</span>
+<span class="bg-white/10 px-2 py-1 rounded text-label-sm">B+ Strength</span>
+</div>
+<div class="flex items-end space-x-2">
+<span class="text-5xl font-black">74</span>
+<span class="text-on-primary-container mb-2 font-semibold">/ 100</span>
+</div>
+<div class="mt-lg w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+<div class="bg-white h-full w-3/4 rounded-full"></div>
+</div>
+</div>
+<div class="p-lg space-y-lg bg-white">
+<!-- SMART Dimensions -->
+<div class="space-y-lg">
+<!-- Specific -->
+<div class="space-y-xs">
+<div class="flex justify-between items-center mb-1">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="track_changes">track_changes</span>
+<span class="font-label-md text-label-md text-primary">Specific</span>
+</div>
+<span class="text-label-sm text-primary font-bold">90%</span>
+</div>
+<div class="w-full bg-surface-container-low h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[90%]"></div>
+</div>
+<p class="text-[11px] text-on-surface-variant leading-relaxed">Excellent. Your goal clearly identifies the 'What' and the 'How'.</p>
+</div>
+<!-- Measurable -->
+<div class="space-y-xs">
+<div class="flex justify-between items-center mb-1">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="square_foot">square_foot</span>
+<span class="font-label-md text-label-md text-primary">Measurable</span>
+</div>
+<span class="text-label-sm text-primary font-bold">45%</span>
+</div>
+<div class="w-full bg-surface-container-low h-1 rounded-full overflow-hidden">
+<div class="bg-error h-full w-[45%]"></div>
+</div>
+<div class="bg-error-container/30 p-sm border-l-2 border-error mt-2">
+<p class="text-[11px] text-on-error-container font-medium">Improvement Needed:</p>
+<p class="text-[11px] text-on-surface-variant mt-1 italic">Define exactly how you will quantify "Mastery". Add a numerical metric.</p>
+</div>
+</div>
+<!-- Achievable -->
+<div class="space-y-xs">
+<div class="flex justify-between items-center mb-1">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="fitness_center">fitness_center</span>
+<span class="font-label-md text-label-md text-primary">Achievable</span>
+</div>
+<span class="text-label-sm text-primary font-bold">82%</span>
+</div>
+<div class="w-full bg-surface-container-low h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[82%]"></div>
+</div>
+<p class="text-[11px] text-on-surface-variant">Reasonable scope for a 7-day period.</p>
+</div>
+<!-- Relevant -->
+<div class="space-y-xs">
+<div class="flex justify-between items-center mb-1">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="link">link</span>
+<span class="font-label-md text-label-md text-primary">Relevant</span>
+</div>
+<span class="text-label-sm text-primary font-bold">100%</span>
+</div>
+<div class="w-full bg-surface-container-low h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-full"></div>
+</div>
+<p class="text-[11px] text-on-surface-variant">Strongly aligns with your 'Productivity' focus area.</p>
+</div>
+<!-- Time-bound -->
+<div class="space-y-xs">
+<div class="flex justify-between items-center mb-1">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="schedule">schedule</span>
+<span class="font-label-md text-label-md text-primary">Time-bound</span>
+</div>
+<span class="text-label-sm text-primary font-bold">60%</span>
+</div>
+<div class="w-full bg-surface-container-low h-1 rounded-full overflow-hidden">
+<div class="bg-primary/50 h-full w-[60%]"></div>
+</div>
+<p class="text-[11px] text-on-surface-variant">You've set a month, but a specific day would increase accountability.</p>
+</div>
+</div>
+</div>
+<div class="border-t border-[#DCE3E8] p-md bg-surface-container-lowest">
+<div class="flex items-start space-x-3">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="tips_and_updates">tips_and_updates</span>
+<div class="space-y-xs">
+<p class="text-label-sm text-primary">Architect's Tip</p>
+<p class="text-[11px] text-on-surface-variant leading-tight">Vague goals lead to vague results. Use verbs like "Design," "Build," or "Finalize" instead of "Learn" or "Understand."</p>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Assistant Card -->
+<div class="bg-[#F0F4F8] border border-[#DCE3E8] p-lg rounded-lg relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="font-label-md text-label-md text-primary mb-1">AI Recommendation</h4>
+<p class="text-[12px] text-on-surface-variant mb-md">"To reach 100%, specify the number of design iterations per interface you plan to conduct."</p>
+<button class="w-full py-2 bg-white border border-[#DCE3E8] text-label-sm font-bold text-primary hover:bg-slate-50 transition-colors">Apply Auto-Fix</button>
+</div>
+<div class="absolute -bottom-4 -right-4 text-slate-200/50 scale-[3]">
+<span class="material-symbols-outlined text-[80px]" data-icon="auto_awesome">auto_awesome</span>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+<!-- Contextual FAB (Hidden on this transactional screen as per logic, but included for system integrity if needed) -->
+<!-- Suppression logic applied: No FAB on transactional goal creation screen -->
+</body></html>

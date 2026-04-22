@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#201100",
+                    "on-primary-fixed": "#011d35",
+                    "surface": "#f6fafe",
+                    "secondary-fixed": "#cee5ff",
+                    "on-secondary-fixed-variant": "#2e4962",
+                    "surface-bright": "#f6fafe",
+                    "background": "#f6fafe",
+                    "on-error-container": "#93000a",
+                    "surface-container-high": "#e4e9ed",
+                    "surface-dim": "#d6dade",
+                    "on-secondary-container": "#48637d",
+                    "on-secondary-fixed": "#001d32",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#49607c",
+                    "on-primary-fixed-variant": "#314863",
+                    "on-tertiary-fixed": "#291800",
+                    "on-primary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "outline": "#74777e",
+                    "inverse-primary": "#b0c9e8",
+                    "tertiary-container": "#3b2400",
+                    "primary-container": "#102a43",
+                    "inverse-surface": "#2c3134",
+                    "on-primary-container": "#7a92b0",
+                    "on-tertiary-fixed-variant": "#5d4119",
+                    "on-error": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "outline-variant": "#c3c6ce",
+                    "on-tertiary-container": "#ad8a5a",
+                    "on-surface": "#171c1f",
+                    "tertiary-fixed-dim": "#e8c08c",
+                    "secondary-fixed-dim": "#aec9e7",
+                    "on-background": "#171c1f",
+                    "on-secondary": "#ffffff",
+                    "primary": "#00152a",
+                    "secondary-container": "#c4e0fe",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface-variant": "#43474d",
+                    "surface-variant": "#dfe3e7",
+                    "inverse-on-surface": "#edf1f5",
+                    "primary-fixed-dim": "#b0c9e8",
+                    "tertiary-fixed": "#ffddb4",
+                    "surface-container-highest": "#dfe3e7",
+                    "secondary": "#46617b",
+                    "primary-fixed": "#d1e4ff",
+                    "surface-container": "#eaeef2",
+                    "surface-container-low": "#f0f4f8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sm": "0.5rem",
+                    "md": "1rem",
+                    "xs": "0.25rem",
+                    "gutter": "24px",
+                    "unit": "8px",
+                    "xxl": "4rem",
+                    "lg": "1.5rem",
+                    "container-max": "1280px",
+                    "xl": "2.5rem"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "h1": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "h2": ["Inter"],
+                    "h3": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "h1": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.03em", "fontWeight": "600"}],
+                    "h2": ["30px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "h3": ["24px", {"lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f6fafe;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="flex flex-col w-64 p-4 space-y-2 border-r border-[#DCE3E8] bg-white h-screen sticky top-0">
+<div class="px-2 py-4 mb-4">
+<h1 class="text-xl font-black text-slate-900">FocusTrack</h1>
+<p class="text-label-sm font-label-sm text-slate-500">Quiet Productivity</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-3 py-2 text-slate-500 hover:bg-slate-50 transition-colors rounded-sm group" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<a class="flex items-center px-3 py-2 text-slate-500 hover:bg-slate-50 transition-colors rounded-sm group" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="target">target</span>
+<span class="font-label-md text-label-md">My Goals</span>
+</a>
+<a class="flex items-center px-3 py-2 text-slate-500 hover:bg-slate-50 transition-colors rounded-sm group" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="view_kanban">view_kanban</span>
+<span class="font-label-md text-label-md">Sprints</span>
+</a>
+<a class="flex items-center px-3 py-2 text-slate-500 hover:bg-slate-50 transition-colors rounded-sm group" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="equalizer">equalizer</span>
+<span class="font-label-md text-label-md">Reports</span>
+</a>
+</nav>
+<div class="pt-4 mt-auto border-t border-[#DCE3E8] space-y-1">
+<a class="flex items-center px-3 py-2 bg-slate-100 text-slate-900 rounded-sm" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center px-3 py-2 text-slate-500 hover:bg-slate-50 transition-colors rounded-sm" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="help_outline">help_outline</span>
+<span class="font-label-md text-label-md">Help</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-8 h-16 w-full z-50 bg-white border-b border-[#DCE3E8] sticky top-0">
+<div class="flex items-center gap-8">
+<h2 class="text-lg font-bold text-slate-900">Settings</h2>
+<nav class="hidden md:flex items-center space-x-6 h-full">
+<a class="text-slate-500 hover:text-slate-700 font-label-md text-label-md py-5" href="#">Profile</a>
+<a class="text-slate-900 border-b-2 border-slate-900 font-semibold py-5" href="#">Preferences</a>
+<a class="text-slate-500 hover:text-slate-700 font-label-md text-label-md py-5" href="#">Integrations</a>
+</nav>
+</div>
+<div class="flex items-center space-x-4">
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden border border-[#DCE3E8]">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="close-up portrait of a professional man in a clean office environment with soft natural lighting and minimalist background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmvrHOGZ3RPAWFuVxE61JjacNrD5TBNI8KA5B6i50qxxA-hIA9-zeuFuK10VetZb4kzYT9gY5fmD8Jkci_id8T0HGqZSfsRTCCDCdTiQl1rk62LNX3ROFMuuGc7FjCHEOAqXoTdYPoo2tauOEazphotkksAvf2J1VYcbE2ZLxRpjzX57sI5ou_wAEnnfoUSj1SM2OxX3rDTg_NzxNAzE0ut7YSsEd-7SCP-MTk2qRZ9GUh2Sam4eka6sbMu3QnHl2ChaZD6KPaGko"/>
+</div>
+</div>
+</header>
+<!-- Page Container -->
+<div class="max-w-4xl mx-auto px-8 py-xxl">
+<!-- Profile Section -->
+<section class="mb-xl">
+<h3 class="font-h3 text-h3 text-slate-900 mb-lg">User Profile</h3>
+<div class="bg-white border border-[#DCE3E8] p-lg rounded-none flex items-center space-x-lg">
+<div class="relative group">
+<div class="w-20 h-20 rounded-full bg-slate-100 overflow-hidden border border-[#DCE3E8]">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="professional male headshot with neutral expression and soft lighting on a plain studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqVC2C7qpODCy8yTttg1k48MyLWW7STMsxB5NR4LTfER9FEQ19URn8ZYk0A506wNEtcYI9FyMcMechhs0m7SFkpmAifNzW536MPslh2i-nSa40fs_AGkhdIQRnAfFZmRXUoLQf4wxJeGixeBJDidqa5FTDB_ckvbYOD2g33uEbiujsDvMX_TQTVja8_zUB4uX4Koy8nNO8bRzZYA7aPO-jOjzX59zpFfdJ4lSVvjSsmRYO0TbLbwYgbg3NvNm10L9hz6GIMghmmr0"/>
+</div>
+<button class="absolute bottom-0 right-0 bg-primary text-white p-1.5 rounded-full border-2 border-white">
+<span class="material-symbols-outlined text-[16px]" data-icon="edit">edit</span>
+</button>
+</div>
+<div class="flex-1">
+<h4 class="font-h3 text-h3 text-slate-900">Alex Henderson</h4>
+<p class="font-body-md text-body-md text-slate-500">alex.henderson@focustrack.io</p>
+</div>
+<button class="px-md py-sm border border-[#DCE3E8] text-slate-700 font-label-md text-label-md hover:bg-slate-50 transition-colors">
+                            Manage Identity
+                        </button>
+</div>
+</section>
+<!-- Home Screen Selection -->
+<section class="mb-xl">
+<div class="mb-lg">
+<h3 class="font-h3 text-h3 text-slate-900">Default Home Screen</h3>
+<p class="font-body-md text-body-md text-slate-500">Choose which view opens when you launch FocusTrack.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<!-- Option 1 -->
+<label class="relative cursor-pointer group">
+<input checked="" class="peer sr-only" name="home_screen" type="radio" value="today"/>
+<div class="h-full p-lg border border-[#DCE3E8] bg-white transition-all group-hover:bg-slate-50 peer-checked:border-primary peer-checked:bg-surface-container-low">
+<div class="flex justify-between items-start mb-md">
+<span class="material-symbols-outlined text-primary" data-icon="today">today</span>
+<div class="w-4 h-4 border border-[#DCE3E8] rounded-full flex items-center justify-center peer-checked:border-primary">
+<div class="w-2 h-2 bg-primary rounded-full opacity-0 peer-checked:group-[]:opacity-100"></div>
+</div>
+</div>
+<p class="font-label-md text-label-md text-slate-900 mb-xs">Today</p>
+<p class="text-label-sm text-slate-500">Daily focus and immediate tasks.</p>
+</div>
+</label>
+<!-- Option 2 -->
+<label class="relative cursor-pointer group">
+<input class="peer sr-only" name="home_screen" type="radio" value="sprint"/>
+<div class="h-full p-lg border border-[#DCE3E8] bg-white transition-all group-hover:bg-slate-50 peer-checked:border-primary peer-checked:bg-surface-container-low">
+<div class="flex justify-between items-start mb-md">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors" data-icon="view_kanban">view_kanban</span>
+<div class="w-4 h-4 border border-[#DCE3E8] rounded-full"></div>
+</div>
+<p class="font-label-md text-label-md text-slate-900 mb-xs">Sprint Board</p>
+<p class="text-label-sm text-slate-500">Kanban view of active weekly sprint.</p>
+</div>
+</label>
+<!-- Option 3 -->
+<label class="relative cursor-pointer group">
+<input class="peer sr-only" name="home_screen" type="radio" value="dashboard"/>
+<div class="h-full p-lg border border-[#DCE3E8] bg-white transition-all group-hover:bg-slate-50 peer-checked:border-primary peer-checked:bg-surface-container-low">
+<div class="flex justify-between items-start mb-md">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors" data-icon="analytics">analytics</span>
+<div class="w-4 h-4 border border-[#DCE3E8] rounded-full"></div>
+</div>
+<p class="font-label-md text-label-md text-slate-900 mb-xs">Goal Dashboard</p>
+<p class="text-label-sm text-slate-500">High-level metrics and goal progress.</p>
+</div>
+</label>
+</div>
+</section>
+<!-- Notification Settings -->
+<section class="mb-xl">
+<h3 class="font-h3 text-h3 text-slate-900 mb-lg">Notifications</h3>
+<div class="bg-white border border-[#DCE3E8] rounded-none divide-y divide-[#DCE3E8]">
+<!-- Item 1 -->
+<div class="p-lg flex items-center justify-between">
+<div>
+<p class="font-label-md text-label-md text-slate-900">System Alerts</p>
+<p class="font-body-md text-body-md text-slate-500">Important updates about your account and security.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Item 2 -->
+<div class="p-lg flex items-center justify-between">
+<div>
+<p class="font-label-md text-label-md text-slate-900">Sprint Reminders</p>
+<p class="font-body-md text-body-md text-slate-500">Daily nudges to update your sprint progress.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Item 3 -->
+<div class="p-lg flex items-center justify-between">
+<div>
+<p class="font-label-md text-label-md text-slate-900">Weekly Summary</p>
+<p class="font-body-md text-body-md text-slate-500">A detailed email report of your weekly productivity.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</section>
+<!-- Action Footer -->
+<footer class="flex justify-end items-center space-x-md pt-lg border-t border-[#DCE3E8]">
+<button class="px-lg py-sm border border-[#DCE3E8] text-slate-700 font-label-md text-label-md hover:bg-slate-50 transition-colors">
+                        Discard Changes
+                    </button>
+<button class="px-xl py-sm bg-primary text-white font-label-md text-label-md hover:opacity-90 transition-opacity">
+                        Save Preferences
+                    </button>
+</footer>
+</div>
+</main>
+</div>
+</body></html>

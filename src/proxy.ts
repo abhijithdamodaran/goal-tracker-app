@@ -43,8 +43,12 @@ const AUTH_API_PREFIX = "/api/auth";
 /** The onboarding wizard path prefix. */
 const ONBOARDING_PREFIX = "/onboarding";
 
-/** Where authenticated + onboarded users land by default. */
-const DEFAULT_AUTHED_PATH = "/dashboard";
+/** Map homeScreen preference → redirect path. */
+const HOME_SCREEN_PATHS: Record<string, string> = {
+  today: "/today",
+  sprint: "/sprints",
+  dashboard: "/dashboard",
+};
 
 function isPublicPath(pathname: string): boolean {
   return PUBLIC_PATHS.some(
@@ -111,9 +115,9 @@ export const proxy = auth(
       pathname === ONBOARDING_PREFIX ||
       pathname.startsWith(`${ONBOARDING_PREFIX}/`)
     ) {
-      return NextResponse.redirect(
-        new URL(DEFAULT_AUTHED_PATH, req.nextUrl.origin)
-      );
+      const homeScreen = req.auth.user?.homeScreen ?? "today";
+      const homePath = HOME_SCREEN_PATHS[homeScreen] ?? "/today";
+      return NextResponse.redirect(new URL(homePath, req.nextUrl.origin));
     }
 
     return NextResponse.next();

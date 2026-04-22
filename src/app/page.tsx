@@ -17,16 +17,18 @@ import { redirect } from "next/navigation";
  * guards so that any edge case (e.g. a stale session cookie) is handled
  * gracefully without an infinite redirect loop.
  */
+const HOME_PATHS: Record<string, string> = {
+  today: "/today",
+  sprint: "/sprints",
+  dashboard: "/dashboard",
+};
+
 export default async function HomePage() {
   const session = await auth();
 
-  if (!session?.user) {
-    redirect("/signin");
-  }
+  if (!session?.user) redirect("/signin");
+  if (!session.user.onboardingCompleted) redirect("/onboarding");
 
-  if (!session.user.onboardingCompleted) {
-    redirect("/onboarding");
-  }
-
-  redirect("/dashboard");
+  const homeScreen = session.user.homeScreen ?? "today";
+  redirect(HOME_PATHS[homeScreen] ?? "/today");
 }
