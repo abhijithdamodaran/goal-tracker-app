@@ -174,8 +174,12 @@ Models currently in `prisma/schema.prisma`:
 | `Habit` | Recurring habit with streak config and denormalised streak state |
 | `HabitCheckIn` | Daily check-in record; offline-sync via `syncStatus` field |
 | `Goal` | SMART goal with title, description, metric/target/unit, reflection, deadline, smartScore, workspaceType |
+| `Cycle` | Time window (monthly/quarterly/half-yearly/yearly) scoping milestones |
+| `Milestone` | Intermediate target under a Goal, assigned to a Cycle; completedAt for done state |
+| `Sprint` | Weekly time-box (Mon–Sun); holds ActionItems; reviewedAt for sprint review |
+| `ActionItem` | Task under a Milestone; assigned to a Sprint; done/not-done toggle; ownerId + assigneeId |
 
-Not yet added (future phases): Milestone, Cycle, ActionItem, Sprint, AICoachSuggestion.
+Not yet added (future phases): AICoachSuggestion.
 
 ---
 
@@ -198,6 +202,27 @@ Not yet added (future phases): Milestone, Cycle, ActionItem, Sprint, AICoachSugg
 | `/goals/new` | page | Goal creation form with live SMART scoring |
 | `/goals/[id]` | page | Goal detail with SMART analysis |
 | `/goals/[id]/edit` | page | Edit goal form |
+| `/api/cycles` | GET/POST | List cycles / create cycle |
+| `/api/cycles/[id]` | GET/PATCH/DELETE | Get, update, or delete a cycle |
+| `/api/goals/[id]/milestones` | GET/POST | List milestones for a goal / add milestone |
+| `/api/milestones/[id]` | PATCH/DELETE | Update (incl. toggle complete) or delete milestone |
+| `/cycles` | page | List all cycles (active / upcoming / past) |
+| `/cycles/new` | page | Create cycle with type picker + auto date fill |
+| `/cycles/[id]` | page | Cycle detail — milestones grouped by goal |
+| `/api/sprints` | GET/POST | List sprints / create sprint (auto Mon-Sun, dedup same week) |
+| `/api/sprints/[id]` | GET/PATCH | Get sprint with action items / update name or reviewedAt |
+| `/api/action-items` | POST | Create action item under a milestone |
+| `/api/action-items/[id]` | PATCH/DELETE | Toggle done, update fields, or delete action item |
+| `/api/habits` | GET/POST | List active habits / create habit |
+| `/api/habits/[habitId]` | GET/PATCH/DELETE | Get, update, or soft-delete (deactivate) habit |
+| `/sprints` | page | Sprint list (current / upcoming / past) with progress bars |
+| `/sprints/new` | page | Week picker → create sprint |
+| `/sprints/[id]` | page | Sprint board — todo / done sections, inline add, sprint review |
+| `/habits` | page | Habits list — today's scheduled + all habits |
+| `/habits/new` | page | Habit creation form |
+| `/habits/[id]` | page | Habit detail — check-in, streak stats, 28-day calendar |
+| `/today` | page | Today view — habit check-ins + current sprint action items |
+| `/goals` | page | Goals list with SMART badge and milestone progress |
 
 ---
 
@@ -279,7 +304,7 @@ Legend: ✅ Complete · 🔄 In progress · ⬜ Not started
 
 ---
 
-## Phase 4 — Milestones + Cycles ⬜
+## Phase 4 — Milestones + Cycles ✅
 
 **Goal:** Goals are decomposed into time-boxed milestones across monthly/quarterly/half-yearly/yearly cycles.
 
@@ -296,9 +321,17 @@ Legend: ✅ Complete · 🔄 In progress · ⬜ Not started
 
 **Acceptance:** AC 9 — milestones assignable to monthly/quarterly/half-yearly/yearly cycles.
 
+**Implementation notes:**
+- Cycle model: type enum = "monthly"|"quarterly"|"half-yearly"|"yearly"; autoEndDate() helper on creation form
+- Milestone model: belongs to Goal + Cycle; `completedAt` null=incomplete, set=complete (toggle)
+- Goal detail shows milestones grouped by cycle; inline add form loads available cycles from `/api/cycles`
+- `/cycles` page groups cycles into Active / Upcoming / Past sections with progress bars
+- `/cycles/[id]` shows milestones grouped by goal with completion state
+- New API routes: `GET/POST /api/cycles`, `GET/PATCH/DELETE /api/cycles/[id]`, `GET/POST /api/goals/[id]/milestones`, `PATCH/DELETE /api/milestones/[id]`
+
 ---
 
-## Phase 5 — Action Items + Sprints ⬜
+## Phase 5 — Action Items + Sprints ✅
 
 **Goal:** Milestones decompose into action items; action items are executed in weekly sprints.
 
@@ -319,7 +352,7 @@ Legend: ✅ Complete · 🔄 In progress · ⬜ Not started
 
 ---
 
-## Phase 6 — Habits + Today View ⬜
+## Phase 6 — Habits + Today View ✅
 
 **Goal:** Users create recurring habits and check them off daily; streaks calculated per configured mode.
 

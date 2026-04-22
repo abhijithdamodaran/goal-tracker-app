@@ -94,10 +94,12 @@ export default async function DashboardPage() {
           </div>
 
           <nav className="hidden sm:flex items-center gap-1">
-            <span title="Coming soon" className="cursor-default rounded-lg px-3 py-1.5 text-sm font-medium text-gray-400">Today</span>
-            <span title="Coming soon" className="cursor-default rounded-lg px-3 py-1.5 text-sm font-medium text-gray-400">Habits</span>
-            <Link href="/goals/new" className="rounded-lg px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100">Goals</Link>
-            <span title="Coming soon" className="cursor-default rounded-lg px-3 py-1.5 text-sm font-medium text-gray-400">Sprints</span>
+            <Link href="/today" className="rounded-lg px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100">Today</Link>
+            <Link href="/habits" className="rounded-lg px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100">Habits</Link>
+            <Link href="/goals" className="rounded-lg px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100">Goals</Link>
+            <Link href="/action-items" className="rounded-lg px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100">Action Items</Link>
+            <Link href="/cycles" className="rounded-lg px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100">Cycles</Link>
+            <Link href="/sprints" className="rounded-lg px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100">Sprints</Link>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -124,7 +126,7 @@ export default async function DashboardPage() {
           </h1>
           <p className="mt-1 text-gray-500">
             {completedCount === checklist.length
-              ? "You're all set up. Features are coming soon."
+              ? "You're all set up. Head to Today to start your day."
               : "Let's get you set up. Complete the steps below to get started."}
           </p>
         </div>

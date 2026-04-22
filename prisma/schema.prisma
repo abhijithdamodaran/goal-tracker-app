@@ -78,6 +78,16 @@ model User {
 
   // Goals owned by this user
   goals Goal[]
+
+  // Cycles owned by this user
+  cycles Cycle[]
+
+  // Sprints owned by this user
+  sprints Sprint[]
+
+  // Action items owned by or assigned to this user
+  ownedActionItems    ActionItem[] @relation("OwnedActionItems")
+  assignedActionItems ActionItem[] @relation("AssignedActionItems")
 }
 
 model FamilyWorkspace {
@@ -164,6 +174,100 @@ model Habit {
   checkIns HabitCheckIn[]
 }
 
+// ─── Sprint + ActionItem Models ─────────────────────────────────
+
+/// A weekly time-box (Mon–Sun) containing action items.
+model Sprint {
+  id          String    @id @default(uuid())
+  name        String    // e.g. "Week of Apr 21"
+  startDate   DateTime  // Monday
+  endDate     DateTime  // Sunday
+  reviewedAt  DateTime?
+
+  workspaceType String  @default("personal") // "personal" | "family"
+  workspaceId   String?
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  actionItems ActionItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// A one-off task under an optional Milestone, assignable to a Sprint.
+model ActionItem {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  dueDate     DateTime?
+  done        Boolean  @default(false)
+
+  milestoneId String?
+  milestone   Milestone? @relation(fields: [milestoneId], references: [id], onDelete: SetNull)
+
+  sprintId String?
+  sprint   Sprint? @relation(fields: [sprintId], references: [id], onDelete: SetNull)
+
+  assigneeId String?
+  assignee   User?   @relation("AssignedActionItems", fields: [assigneeId], references: [id], onDelete: SetNull)
+
+  workspaceType String  @default("personal") // "personal" | "family"
+  workspaceId   String?
+
+  ownerId String
+  owner   User   @relation("OwnedActionItems", fields: [ownerId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Cycle + Milestone Models ───────────────────────────────────
+
+/// A time-boxed planning window that scopes Milestones.
+/// type values: "monthly" | "quarterly" | "half-yearly" | "yearly"
+model Cycle {
+  id        String   @id @default(uuid())
+  name      String
+  /// "monthly" | "quarterly" | "half-yearly" | "yearly"
+  type      String
+  startDate DateTime
+  endDate   DateTime
+
+  // A cycle belongs to a workspace (personal goals use user's own "workspace")
+  workspaceType String @default("personal") // "personal" | "family"
+  workspaceId   String? // null for personal cycles
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  milestones Milestone[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// An intermediate target under a Goal, assigned to a Cycle.
+model Milestone {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+
+  completedAt DateTime?
+
+  goalId  String
+  goal    Goal   @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  cycleId String
+  cycle   Cycle  @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+
+  actionItems ActionItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // ─── Goal Models ────────────────────────────────────────────────
 
 /// A SMART goal owned by a user, optionally shared with a family workspace.
@@ -193,6 +297,8 @@ model Goal {
 
   ownerId String
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  milestones Milestone[]
 
   // Soft delete
   archivedAt DateTime?
