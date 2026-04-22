@@ -2,20 +2,20 @@
  * Streak Calculation Engine — Core Types
  *
  * Defines the type system for tracking habit streaks across
- * multiple modes: strict, relaxed, and custom.
+ * three modes: strict, one-grace-per-week, percentage-threshold.
  */
 
 /** Streak counting mode determines how missed days affect the streak */
 export enum StreakMode {
-  /** Streak resets to 0 on any missed day */
+  /** Streak resets to 0 on any missed scheduled occurrence */
   Strict = 'strict',
-  /** Allows a configurable number of grace days before resetting */
-  Relaxed = 'relaxed',
-  /** Custom schedule — only counts specific days of the week */
-  Custom = 'custom',
+  /** One skip per week is tolerated; a second miss in the same week resets */
+  OneGracePerWeek = 'one-grace-per-week',
+  /** Streak survives while weekly completion rate stays at or above threshold */
+  PercentageThreshold = 'percentage-threshold',
 }
 
-/** Days of the week for custom schedules */
+/** Days of the week for scheduling */
 export enum DayOfWeek {
   Sunday = 0,
   Monday = 1,
@@ -32,17 +32,17 @@ export interface StreakConfig {
   mode: StreakMode;
 
   /**
-   * Number of grace days allowed before streak resets (Relaxed mode only).
-   * e.g., graceDays=1 means missing one day doesn't break the streak.
-   * Defaults to 1 if not specified in Relaxed mode.
-   */
-  graceDays?: number;
-
-  /**
-   * Which days of the week the habit is scheduled (Custom mode only).
-   * e.g., [DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday]
+   * Which days of the week the habit is scheduled.
+   * Defaults to every day (all 7 days) if not specified.
    */
   scheduledDays?: DayOfWeek[];
+
+  /**
+   * Required weekly completion percentage (0-1) for PercentageThreshold mode.
+   * e.g., 0.8 means 80% of scheduled days must be completed.
+   * Defaults to 0.8 if not specified.
+   */
+  percentageThreshold?: number;
 
   /**
    * The timezone to use for day boundary calculations.
@@ -68,7 +68,7 @@ export interface CheckIn {
 
 /** Result of a streak calculation */
 export interface StreakResult {
-  /** Current active streak count */
+  /** Current active streak count (in weeks for weekly modes, days for strict) */
   currentStreak: number;
 
   /** Longest streak ever achieved */
@@ -83,8 +83,8 @@ export interface StreakResult {
   /** Total number of completed check-ins */
   totalCompleted: number;
 
-  /** Total number of days in the tracking period */
-  totalDays: number;
+  /** Total number of scheduled days in the tracking period */
+  totalScheduledDays: number;
 
   /** Completion rate as a decimal (0-1) */
   completionRate: number;

@@ -1,0 +1,182 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ─── NextAuth.js Models ─────────────────────────────────────────────
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── Application Models ─────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(uuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  /// True once the user has completed the post-signup onboarding wizard.
+  /// New users are detected by this being false immediately after first sign-in.
+  onboardingCompleted Boolean @default(false)
+
+  /// Bcrypt-hashed password for credentials login. Null for SSO-only users.
+  password String?
+
+  // NextAuth relations
+  accounts Account[]
+  sessions Session[]
+
+  // Family memberships
+  familyMemberships FamilyMember[]
+
+  // Habits owned by this user
+  habits Habit[]
+}
+
+model FamilyWorkspace {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Members of this family
+  members     FamilyMember[]
+  inviteCodes InviteCode[]
+}
+
+/// A short-lived invite code that lets a second user join a FamilyWorkspace.
+/// Expires after 7 days. Single-use (usedAt is set on redemption).
+model InviteCode {
+  id          String    @id @default(uuid())
+  code        String    @unique
+  workspaceId String
+  workspace   FamilyWorkspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdById String
+  expiresAt   DateTime
+  usedAt      DateTime?
+  createdAt   DateTime  @default(now())
+}
+
+model FamilyMember {
+  id       String   @id @default(uuid())
+  role     String   @default("member") // "owner", "admin", "member"
+  joinedAt DateTime @default(now())
+
+  userId      String
+  user        User            @relation(fields: [userId], references: [id])
+  workspaceId String
+  workspace   FamilyWorkspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, workspaceId])
+}
+
+// ─── Habit Models ────────────────────────────────────────────────
+
+/// A recurring action tracked with streaks.
+/// streakMode values (stored as String): "strict" | "one-grace-per-week" | "percentage-threshold"
+model Habit {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+
+  // ── Streak configuration ──────────────────────────────────────
+  /// One of: "strict" | "one-grace-per-week" | "percentage-threshold"
+  streakMode          String  @default("strict")
+  /// Completion threshold (0.0–1.0) for percentage-threshold mode. Default 0.8 = 80%.
+  percentageThreshold Float   @default(0.8)
+  /// JSON-encoded array of DayOfWeek integers (0=Sun … 6=Sat). Default = all days.
+  scheduledDays       String  @default("[0,1,2,3,4,5,6]")
+  /// IANA timezone for day-boundary calculations. Default UTC.
+  timezone            String  @default("UTC")
+
+  // ── Streak state (denormalised for read performance) ─────────
+  /// Current active streak count.
+  streakCount            Int       @default(0)
+  /// All-time longest streak achieved.
+  longestStreak          Int       @default(0)
+  /// ISO week string (e.g. "2026-W16") of the week in which grace was last used.
+  /// Null means no grace has been used in the current week.
+  /// Used exclusively by one-grace-per-week mode.
+  graceUsedWeek          String?
+  /// ISO date string (YYYY-MM-DD) when the current streak started. Null if no active streak.
+  currentStreakStartDate  String?
+  /// ISO date string (YYYY-MM-DD) of the most recent completed check-in. Null if never completed.
+  lastCompletedDate       String?
+
+  // ── Status ───────────────────────────────────────────────────
+  isActive Boolean @default(true)
+
+  // ── Timestamps ───────────────────────────────────────────────
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ── Relations ────────────────────────────────────────────────
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  checkIns HabitCheckIn[]
+}
+
+/// A single daily check-in for a Habit.
+/// Supports offline capture with background sync via syncStatus.
+/// syncStatus values (stored as String): "synced" | "pending" | "conflict"
+model HabitCheckIn {
+  id         String  @id @default(uuid())
+  /// ISO date string (YYYY-MM-DD) for which this check-in was recorded.
+  date       String
+  completed  Boolean @default(false)
+  note       String?
+
+  /// Timestamp when this record was created/modified on the client.
+  recordedAt DateTime @default(now())
+
+  /// Offline-sync state: "synced" | "pending" | "conflict"
+  syncStatus String   @default("synced")
+
+  habitId String
+  habit   Habit  @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+  /// Each habit may have at most one check-in per calendar date.
+  @@unique([habitId, date])
+}
